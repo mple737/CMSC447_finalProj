@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider, SignedIn, SignedOut } from "@clerk/nextjs";
-//import LandingPage from "./landingPage";
+import LandingPage from "./ui/home/homepage";
 import Header from "./ui/home/header";
 import Footer from "./ui/home/footer";
 
@@ -31,6 +31,11 @@ export default function RootLayout({
               <SignedIn>
                 {children}
               </SignedIn>
+
+              <SignedOut>
+                <LandingPage />
+              </SignedOut>
+
 
             </main>
             <Footer />
