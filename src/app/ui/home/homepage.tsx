@@ -98,11 +98,12 @@ const Page: React.FC = () => {
             for effective support.</span>
           </p>
 
-          {/* Get Started Button */}
+          {/* Get Started Button, can create a different page just for log in and sign up */}
           <div className="flex flex-col items-center mb-8">
             <div className="px-4 py-2 bg-gradient-to-r from-purple-700 to-blue-700 text-white rounded-lg hover:from-purple-600 hover:to-blue-800 transition mb-4">
               <SignInButton mode="modal">Get Started</SignInButton>
             </div>
+            
           </div>
         </section>
       </div>

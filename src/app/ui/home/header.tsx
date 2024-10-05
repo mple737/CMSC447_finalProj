@@ -30,12 +30,12 @@ export default function Header() {
         <a href="#contact" className="font-semibold uppercase text-white hover:text-gray-600 transition duration-200">Contact</a>
       </nav>
 
-      {/* User Authentication Buttons */}
+      {/* User Authentication Buttons, can create a different page just for log in and sign up  */}
       <div className="flex items-center space-x-4 mr-8">
         <SignedOut>
 
           <div className="px-4 py-2 bg-gradient-to-r from-purple-700 to-blue-700 text-white rounded-lg hover:from-purple-600 hover:to-blue-800 transition duration-200">
-            <SignInButton>Log In</SignInButton>
+            <SignInButton  mode="modal">Log In</SignInButton>
           </div>
 
         </SignedOut>
