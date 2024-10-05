@@ -48,7 +48,7 @@ const Page: React.FC = () => {
               </div>
 
               {/* "Welcome to" Text */}
-              <span className="ml-2 md:ml-4 mr-2 md:mr-4 text-sm md:text-base lg:text-lg xl:text-xl bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 bg-clip-text text-transparent font-bold uppercase">
+              <span className="ml-2 md:ml-4 mr-2 md:mr-4 text-xl md:text-base lg:text-lg xl:text-xl bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 bg-clip-text text-transparent font-bold uppercase">
                 Welcome to
               </span>
 
