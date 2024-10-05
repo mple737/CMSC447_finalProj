@@ -9,6 +9,8 @@ const Footer: React.FC = () => {
           <div className="text-sm text-gray-300">
             Copyright &copy; Supportlify 2024
           </div>
+
+          
           <div className="mt-2 sm:mt-0 text-sm">
             <a className="mx-2 hover:text-blue-400" href="#!">Privacy</a>
             <span>&middot;</span>

@@ -14,15 +14,16 @@ export default function Header() {
       {/* Logo Section */}
       <div className="ml-4 cursor-pointer">
         <Image 
-          src="/logo/logo.png" // Correct path to your logo
+          src="/logo/logo.png" 
           alt="Supportlify Logo"
-          width={110} // Set appropriate width
-          height={50} // Adjusted height for better visibility
+          width={110} 
+          height={50}
         />
       </div>
 
-      {/* Navigation Links moved to the right */}
+      {/* Navigation Links*/}
       <nav className="flex space-x-12 ml-auto mr-8">
+        
         <a href="#home" className="font-semibold uppercase hover:text-gray-600 transition duration-200">Home</a>
         <a href="#about" className="font-semibold uppercase hover:text-gray-600 transition duration-200">About Us</a>
         <a href="#services" className="font-semibold uppercase hover:text-gray-600 transition duration-200">Services</a>
@@ -33,13 +34,17 @@ export default function Header() {
       {/* User Authentication Buttons */}
       <div className="flex items-center space-x-4 mr-8">
         <SignedOut>
+
           <div className="px-4 py-2 bg-gradient-to-r from-purple-700 to-blue-700 text-white rounded-lg hover:from-purple-600 hover:to-blue-800 transition duration-200">
             <SignInButton>Log In</SignInButton>
           </div>
+
         </SignedOut>
         <SignedIn>
+
           <div className="px-4 py-2 bg-gradient-to-r from-purple-700 to-blue-700 text-white rounded-lg hover:from-purple-600 hover:to-blue-800 transition duration-200">
             <UserButton showName />
+
           </div>
         </SignedIn>
       </div>
