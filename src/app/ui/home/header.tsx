@@ -6,6 +6,8 @@ import {
   SignInButton,
   UserButton,
 } from "@clerk/nextjs";
+
+import Link from 'next/link';
 import Image from "next/image";
 
 export default function Header() {
@@ -23,11 +25,11 @@ export default function Header() {
 
       {/* Navigation Links */}
       <nav className="flex space-x-12 ml-auto mr-8">
-        <a href="#home" className="font-semibold uppercase text-white hover:text-gray-600 transition duration-200">Home</a>
-        <a href="#about" className="font-semibold uppercase text-white hover:text-gray-600 transition duration-200">About Us</a>
-        <a href="#services" className="font-semibold uppercase text-white hover:text-gray-600 transition duration-200">Services</a>
-        <a href="#faq" className="font-semibold uppercase text-white hover:text-gray-600 transition duration-200">FAQ</a>
-        <a href="#contact" className="font-semibold uppercase text-white hover:text-gray-600 transition duration-200">Contact</a>
+        <a href="/homePage" className="font-semibold uppercase text-white hover:text-gray-600 transition duration-200">Home</a>
+        <a href="/about" className="font-semibold uppercase text-white hover:text-gray-600 transition duration-200">About Us</a>
+        <a href="/services" className="font-semibold uppercase text-white hover:text-gray-600 transition duration-200">Services</a>
+        <a href="/faq" className="font-semibold uppercase text-white hover:text-gray-600 transition duration-200">FAQ</a>
+        <a href="/contact" className="font-semibold uppercase text-white hover:text-gray-600 transition duration-200">Contact</a>
       </nav>
 
       {/* User Authentication Buttons, can create a different page just for log in and sign up  */}

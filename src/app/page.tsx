@@ -1,15 +1,16 @@
-import Image from "next/image";
 
+import HomePage from "./ui/home/homepage";
+import Demo from "./ui/home/demo";
+import About from "./ui/home/about";
+export default function Home() {
 
-// this page is a landing page and should not be used for other purposes;
-export default async function Home() {
+  //Create the website design the same as NETLIFY design 
+
   return (
-    <main>
-
-      <div className="flex min-h-screen flex-col items-center">
-
-      </div>
-    </main>
-
+    <div className="flex min-h-screen flex-col items-center">
+      <HomePage />
+      <Demo />
+      <About />
+    </div>
   );
 }

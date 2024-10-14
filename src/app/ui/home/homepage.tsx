@@ -1,9 +1,9 @@
 import { SignInButton } from '@clerk/nextjs';
 //import { Box, Typography, useTheme, useMediaQuery } from '@mui/material';
 
-const Page: React.FC = () => {
+export default function HomePage() {
   return (
-    <main className="flex w-full h-screen bg-cover bg-center bg-[url('/logo/ai.avif')]">
+    <main className="flex w-full h-screen bg-gradient-to-r from-purple-600 to-blue-600">
       {/* Main Section with Background Image */}
      
       <div className="relative w-full flex flex-col justify-center items-center bg-black bg-opacity-60 h-full p-6">
@@ -88,12 +88,12 @@ const Page: React.FC = () => {
           </section>
 
           {/* Main Title */}
-          <div className="text-[3rem] md:text-[4rem] lg:text-[5rem] bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 bg-clip-text text-transparent font-bold uppercase mb-4 shadow-lg">
+          <div className="text-[3rem] md:text-[4rem] lg:text-[5rem] bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 bg-clip-text text-transparent font-bold uppercase mb-4">
             Supportlify
           </div>
 
           {/* Sub Title */}
-          <p className="relative uppercase tracking-widest text-md md:text-xl lg:text-xl bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 bg-clip-text text-transparent font-bold mb-8 shadow-lg">
+          <p className="relative uppercase tracking-widest text-md md:text-xl lg:text-xl bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 bg-clip-text text-transparent font-bold mb-8 ">
             <span> Connecting users and administrators<br/>
             for effective support.</span>
           </p>
@@ -101,14 +101,14 @@ const Page: React.FC = () => {
           {/* Get Started Button, can create a different page just for log in and sign up */}
           <div className="flex flex-col items-center mb-8">
             <div className="px-4 py-2 bg-gradient-to-r from-purple-700 to-blue-700 text-white rounded-lg hover:from-purple-600 hover:to-blue-800 transition mb-4">
+              
               <SignInButton mode="modal">Get Started</SignInButton>
-            </div>
             
+            </div>
+
           </div>
         </section>
       </div>
     </main>
   );
 };
-
-export default Page;
