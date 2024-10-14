@@ -7,7 +7,7 @@ export default async function Home() {
     <main>
 
       <div className="flex min-h-screen flex-col items-center">
-=
+
       </div>
     </main>
 
