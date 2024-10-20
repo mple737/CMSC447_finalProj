@@ -1,12 +1,13 @@
 import React from 'react';
 import Image from 'next/image'; // Only if you're using Next.js
 
+
 const About = () => {
   return (
 
 
-    <main className="flex w-full h-screen bg-gradient-to-r from-purple-600 to-blue-600">
-    <div className="relative w-full flex flex-col justify-center items-center bg-black bg-opacity-60 h-full p-6">
+<main className="flex w-full h-screen bg-gradient-to-r from-purple-600 to-blue-600">
+  <div className="relative w-full flex flex-col justify-center items-center bg-black bg-opacity-60 h-full p-6">
     <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center px-6 md:px-12">
      
       {/* Text Section */}
@@ -21,6 +22,7 @@ const About = () => {
         </div>
 
         {/* Image Section */}
+        
         <div className="md:w-1/2 flex justify-center">
           <Image
             src="/logo/customerService.avif"
@@ -31,6 +33,7 @@ const About = () => {
           />
           
         </div>
+
       </div>
     </div>
   </main>
