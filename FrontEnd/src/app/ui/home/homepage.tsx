@@ -1,14 +1,18 @@
 import { SignInButton } from '@clerk/nextjs';
-//import { Box, Typography, useTheme, useMediaQuery } from '@mui/material';
 
 export default function HomePage() {
   return (
-    <main className="flex w-full h-screen bg-gradient-to-r from-purple-600 to-blue-600">
-      {/* Main Section with Background Image */}
-     
-      <div className="relative w-full flex flex-col justify-center items-center bg-black bg-opacity-60 h-full p-6">
-        <section className="relative flex flex-col items-center z-10 text-center pt-24 lg:pt-32"> {/* Increased padding-top for larger screens */}
-          
+    <main className="flex w-full h-screen">
+      {/* Background Image */}
+      <div 
+        className="relative w-full h-full bg-cover bg-center"
+        style={{ backgroundImage: "url('/logo/Capture.PNG')" }} // Replace with your image path
+      >
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-black bg-opacity-45 flex flex-col justify-center items-center p-6">
+          {/* Content Section */}
+          <section className="relative flex flex-col items-center z-10 text-center pt-24 lg:pt-32">
+             
           
           {/* "Welcome to" with Dot SVG */}
           <section className="flex flex-col items-center mb-2 text-center">
@@ -100,15 +104,13 @@ export default function HomePage() {
 
           {/* Get Started Button, can create a different page just for log in and sign up */}
           <div className="flex flex-col items-center mb-8">
-            <div className="px-4 py-2 bg-gradient-to-r from-purple-700 to-blue-700 text-white rounded-lg hover:from-purple-600 hover:to-blue-800 transition mb-4">
-              
-              <SignInButton mode="modal">Get Started</SignInButton>
-            
+              <div className="px-4 py-2 bg-gradient-to-r from-purple-700 to-blue-700 text-white rounded-lg hover:from-purple-600 hover:to-blue-800 transition mb-4">
+                <SignInButton mode="modal">Get Started</SignInButton>
+              </div>
             </div>
-
-          </div>
-        </section>
+          </section>
+        </div>
       </div>
     </main>
   );
-};
+}
