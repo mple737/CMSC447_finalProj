@@ -123,7 +123,8 @@ const ContactSection: React.FC = () => {
 
               <button
                 type="submit"
-                className="w-full py-4 font-semibold text-white transition-colors bg-gray-900 rounded-md hover:bg-gray-800 focus:outline-none"
+                className="w-full py-3 font-semibold text-white transition-colors bg-gradient-to-r from-purple-700 to-blue-700 rounded-lg hover:from-purple-600 hover:to-blue-800 focus:outline-none transition duration-200"
+
               >
                 {isSubmitting ? "Sending..." : "Send Message"}
               </button>
