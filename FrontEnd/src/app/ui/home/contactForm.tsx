@@ -107,7 +107,7 @@ const ContactSection: React.FC = () => {
               <div className="mb-4">
                 <textarea
                   placeholder="Your Message"
-                  className={`w-full px-4 py-3 border-2 placeholder:text-gray-400 text-black rounded-md outline-none focus:ring-4 transition duration-200 ${
+                  className={`w-full px-4 py-3 border-2 placeholder:text-gray-400 text-black rounded-md outline-none h-36 focus:ring-4 transition duration-200 ${
                     errors.message ? "border-red-600 focus:border-red-600" : "border-gray-300 focus:border-gray-600"
                   }`}
                   {...register("message", {
