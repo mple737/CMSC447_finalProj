@@ -38,15 +38,15 @@ const ContactSection: React.FC = () => {
           {/* Contact Form Section */}
           <div id="contact-form" className="w-full max-w-lg p-8 mt-10 rounded-lg ">
 
-            <h1 className="text-4xl font-semibold mb-8 text-black">Want to contact us?</h1> {/* Increased size */}
+            <h1 className="text-4xl font-semibold mb-8 text-black"> Want to contact us? </h1> {/* Increased size */}
 
             <form onSubmit={handleSubmit(onSubmit)}>
            
                <div className="mb-4">
-                <input
+               <input
                   type="text"
                   placeholder="Subject"
-                  className={`w-full px-4 py-3 border-2 placeholder:text-gray-800 rounded-md outline-none focus:ring-4 transition duration-200 ${
+                  className={`w-full px-4 py-3 border-2 placeholder:text-gray-400 text-black rounded-md outline-none focus:ring-4 transition duration-200 ${
                     errors.subject ? "border-red-600 focus:border-red-600" : "border-gray-300 focus:border-gray-600"
                   }`}
                   {...register("subject", {
@@ -54,6 +54,7 @@ const ContactSection: React.FC = () => {
                     maxLength: { value: 100, message: "Max length is 100" },
                   })}
                 />
+
                 {errors.subject && (
                   <div className="mt-1 text-red-600">
                     <small>{errors.subject.message}</small>
@@ -65,7 +66,7 @@ const ContactSection: React.FC = () => {
                 <input
                   type="text"
                   placeholder="Full Name"
-                  className={`w-full px-4 py-3 border-2 placeholder:text-gray-800 rounded-md outline-none focus:ring-4 transition duration-200 ${
+                  className={`w-full px-4 py-3 border-2 placeholder:text-gray-400 text-black rounded-md outline-none focus:ring-4 transition duration-200 ${
                     errors.name ? "border-red-600 focus:border-red-600" : "border-gray-300 focus:border-gray-600"
                   }`}
                   {...register("name", {
@@ -84,7 +85,7 @@ const ContactSection: React.FC = () => {
                 <input
                   type="email"
                   placeholder="Email Address"
-                  className={`w-full px-4 py-3 border-2 placeholder:text-gray-800 rounded-md outline-none focus:ring-4 transition duration-200 ${
+                  className={`w-full px-4 py-3 border-2 placeholder:text-gray-400 text-black rounded-md outline-none focus:ring-4 transition duration-200 ${
                     errors.email ? "border-red-600 focus:border-red-600" : "border-gray-300 focus:border-gray-600"
                   }`}
                   {...register("email", {
@@ -106,7 +107,7 @@ const ContactSection: React.FC = () => {
               <div className="mb-4">
                 <textarea
                   placeholder="Your Message"
-                  className={`w-full px-4 py-3 border-2 placeholder:text-gray-800 rounded-md outline-none h-36 focus:ring-4 transition duration-200 ${
+                  className={`w-full px-4 py-3 border-2 placeholder:text-gray-400 text-black rounded-md outline-none focus:ring-4 transition duration-200 ${
                     errors.message ? "border-red-600 focus:border-red-600" : "border-gray-300 focus:border-gray-600"
                   }`}
                   {...register("message", {
