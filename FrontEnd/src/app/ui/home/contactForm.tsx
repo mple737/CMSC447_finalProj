@@ -25,9 +25,14 @@ const ContactSection: React.FC = () => {
   const [message, setMessage] = useState("");
 
   const onSubmit: SubmitHandler<ContactFormInputs> = async (data) => {
-    setIsSuccess(true);
-    setMessage("Message sent successfully!");
-    reset(); // Reset the form
+    
+    // Hide the success message after 5 seconds
+    setTimeout(() => {
+      setIsSuccess(true);
+      setMessage("Message sent successfully!");
+      reset(); // Reset the form
+    }, 5000);
+  
   };
 
   return (
