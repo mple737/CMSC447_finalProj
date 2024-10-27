@@ -21,9 +21,12 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
+        
         <body className={`${inter.className}`}>
           <div className="flex flex-col min-h-screen">
+           
             <Header />
+            
             <main className="flex-grow">
               <SignedIn>
                 {children}  {/* This will render when users are signed in */}

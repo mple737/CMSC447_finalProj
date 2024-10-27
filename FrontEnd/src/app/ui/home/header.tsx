@@ -34,15 +34,15 @@ export default function Header() {
       {/* Navigation Links */}
       <nav className={`hidden md:flex space-x-12 ml-auto mr-8 ${isMobileMenuOpen ? "block" : "hidden"} md:block`}>
        
-        <Link href="/homePage" className="font-semibold uppercase text-black hover:text-gray-600 transition duration-200"> Home </Link>
+        <Link href="/homepage" className="font-semibold uppercase text-black hover:text-gray-600 transition duration-200"> Home </Link>
         
         <Link href="/about" className="font-semibold uppercase text-black hover:text-gray-600 transition duration-200"> About Us </Link>
         
         <Link href="/services" className="font-semibold uppercase text-black hover:text-gray-600 transition duration-200"> Services </Link>
         
-        <Link href="/faq" className="font-semibold uppercase text-black hover:text-gray-600 transition duration-200"> FAQ </Link>
+        <Link href="/FAQ" className="font-semibold uppercase text-black hover:text-gray-600 transition duration-200"> FAQ </Link>
         
-        <Link href="/contact" className="font-semibold uppercase text-black hover:text-gray-600 transition duration-200"> Contact </Link>
+        <Link href="/contactForm" className="font-semibold uppercase text-black hover:text-gray-600 transition duration-200"> Contact </Link>
       </nav>
 
      

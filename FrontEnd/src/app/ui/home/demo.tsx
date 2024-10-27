@@ -5,10 +5,10 @@ export default function Demo() {
     <main className="flex w-full h-screen bg-white">
       <div className="relative w-full flex flex-col justify-center items-center h-full p-6">
         <Image 
-          src="/logo/ai.avif" 
+          src="/logo/Capture.PNG" 
           alt="Demo Image" 
-          width={600} 
-          height={700} 
+          width={500} 
+          height={500} 
           className="rounded-lg shadow-md" 
         />
       </div>

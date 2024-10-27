@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useForm, SubmitHandler } from "react-hook-form";
 
-//This define the form data type
+// This defines the form data type
 interface ContactFormInputs {
   name: string;
   email: string;
@@ -25,16 +25,48 @@ const ContactSection: React.FC = () => {
   const [message, setMessage] = useState("");
 
   const onSubmit: SubmitHandler<ContactFormInputs> = async (data) => {
-    
-    // Hide the success message after 5 seconds
-    setTimeout(() => {
-      setIsSuccess(true);
-      setMessage("Message sent successfully!");
-      reset(); // Reset the form
-    }, 5000);
-  
+     // Web3Forms API endpoint
+    const API_URL = "https://api.web3forms.com/submit";
+
+    // Accessing the API key
+    const API_KEY = process.env.NEXT_PUBLIC_ACCESS_KEY; 
+
+    try {
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ 
+          ...data,
+          access_key: API_KEY 
+        }),
+      });
+
+      if (response.ok) {
+        // Hide the success message after 5 seconds
+        setTimeout(() => {
+          setIsSuccess(true);
+          setMessage("Message sent successfully!");
+          reset(); // Reset the form
+        }, 5000);
+
+      } else {
+        // Handle error
+        setIsSuccess(false);
+        setMessage("Error sending message. Please try again later.");
+      }
+    } catch (error) {
+     
+      // Handle network error
+      console.error("Submission error:", error);
+      setIsSuccess(false);
+      setMessage("Network error. Please check your connection.");
+
+    }
   };
 
+  
   return (
     <main className="flex w-full h-screen bg-white">
       <div className="relative w-full flex flex-col justify-center items-center h-full p-6">
