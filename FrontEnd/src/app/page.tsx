@@ -1,19 +1,11 @@
-import HomePage from "./ui/home/homepage";
-import Demo from "./ui/home/demo";
-import About from "./ui/home/about";
-import ContactForm from "./ui/home/contactForm";
-import FAQ from "./ui/home/FAQ";
+// src/app/page.tsx
+import Dashboard from "./ui/dashboard/page"; // Importing the dashboard component
 
 export default function Home() {
-  // Design the website layout to match NETLIFY's style
-
+  // This page will render the appropriate component based on user authentication status.
   return (
-    <div className="flex min-h-screen flex-col items-center">
-      <HomePage />
-      <Demo />
-      <About />
-      <FAQ />
-      <ContactForm />
-    </div>
+    <> 
+      <Dashboard />   {/* Display the dashboard for authenticated users */}
+    </>
   );
 }

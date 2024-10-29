@@ -1,8 +1,10 @@
+// RootLayout.tsx
+
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { ClerkProvider, SignedIn, SignedOut } from "@clerk/nextjs"; // Ensure SignedIn is imported as well
-import LandingPage from "./page";
+import { ClerkProvider, SignedIn, SignedOut } from "@clerk/nextjs";
+import LandingPage from "./landingPage";
 import Header from "./ui/home/header";
 import Footer from "./ui/home/footer";
 
@@ -21,28 +23,25 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        
         <body className={`${inter.className}`}>
           <div className="flex flex-col min-h-screen">
-           
             <Header />
             
             <main className="flex-grow">
+              {/* Show different content based on whether the user is signed in */}
               <SignedIn>
-                {children}  {/* This will render when users are signed in */}
+                {children} {/* Renders the current route's page content */}
               </SignedIn>
 
-
               <SignedOut>
-                <LandingPage /> {/* This will display the Home component for users who are not signed in */}
+                <LandingPage /> {/* Display landing page if user is not signed in */}
               </SignedOut>
-
             </main>
+
             <Footer />
           </div>
         </body>
       </html>
-      
     </ClerkProvider>
   );
 }

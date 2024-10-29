@@ -11,8 +11,7 @@ import Image from "next/image";
 import { useState } from "react";
 
 export default function Header() {
-  const [isMobileMenuOpen, setMobileMenuOpen] = useState(false); // State to manage mobile menu visibility
-
+  const [isMobileMenuOpen, setMobileMenuOpen] = useState(false); 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!isMobileMenuOpen); // Toggle the mobile menu state
   };
