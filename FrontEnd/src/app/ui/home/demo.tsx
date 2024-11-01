@@ -1,4 +1,6 @@
 import Image from "next/image";
+//This is the demo video section, where it will display the video that will go over what 
+//our website is about and how to use it
 
 export default function Demo() {
   return (

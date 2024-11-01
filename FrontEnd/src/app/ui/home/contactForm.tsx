@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from "react-hook-form";
 
 // This defines the form data type
@@ -12,6 +12,13 @@ interface ContactFormInputs {
 }
 
 const ContactSection: React.FC = () => {
+
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   const {
     register,
     handleSubmit,
@@ -44,11 +51,12 @@ const ContactSection: React.FC = () => {
       });
 
       if (response.ok) {
-        // Hide the success message after 5 seconds
+        setIsSuccess(true);
+        setMessage("Message sent!");
+        reset(); 
+        
         setTimeout(() => {
-          setIsSuccess(true);
-          setMessage("Message sent successfully!");
-          reset(); // Reset the form
+          setMessage("");
         }, 5000);
 
       } else {
@@ -64,8 +72,10 @@ const ContactSection: React.FC = () => {
       setMessage("Network error. Please check your connection.");
 
     }
+    
   };
 
+  if (!isClient) return null; // Prevent server-side rendering of client-specific code
   
   return (
     <main className="flex w-full h-screen bg-white">
@@ -113,7 +123,7 @@ const ContactSection: React.FC = () => {
                 />
                 {errors.name && (
                   <div className="mt-1 text-red-600">
-                    <small>{errors.name.message}</small>
+                    <small> {errors.name.message} </small>
                   </div>
                 )}
               </div>
@@ -128,14 +138,18 @@ const ContactSection: React.FC = () => {
                   {...register("email", {
                     required: "Enter your email",
                     pattern: {
+                     
                       value: /^\S+@\S+$/i,
                       message: "Please enter a valid email",
+
                     },
                   })}
                 />
                 {errors.email && (
                   <div className="mt-1 text-red-600">
-                    <small>{errors.email.message}</small>
+                   
+                    <small> {errors.email.message} </small>
+
                   </div>
                 )}
               </div>
@@ -169,7 +183,7 @@ const ContactSection: React.FC = () => {
             
             {isSubmitSuccessful && (
               <div className="mt-3 text-sm text-center">
-                <div className={`text-${isSuccess ? 'green' : 'red'}-500`}>
+                <div className={`text-${isSuccess ? 'green' : 'red'} -500`}>
                   {message || (isSuccess ? "Success. Message sent successfully." : "Something went wrong. Please try later.")}
                 </div>
               </div>

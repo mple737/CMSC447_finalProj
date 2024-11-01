@@ -1,7 +1,7 @@
 // TicketConversation.js jsut testing
 import React from 'react';
 
-export default function TicketConversation() {
+const TicketConversation = () => {
   return (
     <div className="flex-1 p-4 space-y-6">
       <div className="bg-white p-4 rounded shadow">
@@ -23,3 +23,5 @@ export default function TicketConversation() {
     </div>
   );
 }
+
+export default TicketConversation;

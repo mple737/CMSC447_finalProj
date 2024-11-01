@@ -3,9 +3,11 @@ import Dashboard from "./ui/dashboard/page"; // Importing the dashboard componen
 
 export default function Home() {
   // This page will render the appropriate component based on user authentication status.
+  //When user is log in it will displaying the dashboard component
   return (
     <> 
-      <Dashboard />   {/* Display the dashboard for authenticated users */}
+    {/* Display the dashboard for authenticated users */}
+      <Dashboard />   
     </>
   );
 }

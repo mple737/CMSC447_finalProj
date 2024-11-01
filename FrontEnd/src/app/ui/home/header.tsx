@@ -6,18 +6,30 @@ import {
   SignInButton,
   UserButton,
 } from "@clerk/nextjs";
+
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from "next/image";
-import { useState } from "react";
 
-export default function Header() {
+
+
+const Header = () => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false); 
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!isMobileMenuOpen); // Toggle the mobile menu state
   };
 
+  if (!isClient) return null; // Prevent server-side rendering of client-specific code
+
+
   return (
-    <header className="fixed top-0 left-0 right-0 p-2 bg-white bg-opacity-90 flex justify-between items-center z-50">
+    <header className="fixed top-0 left-0 right-0 p-0 bg-white bg-opacity-90 flex justify-between items-center z-50">
       
       <div className="ml-4 cursor-pointer">
         <Image 
@@ -97,3 +109,4 @@ export default function Header() {
     </header>
   );
 }
+export default Header;

@@ -1,5 +1,12 @@
-// Header.js jsut testng
+// Header.js
 import React from 'react';
+import {
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  UserButton,
+  SignOutButton,
+} from "@clerk/nextjs";
 
 export default function Header() {
   return (
@@ -16,7 +23,13 @@ export default function Header() {
           className="w-1/3 p-2 border border-gray-300 rounded"
         />
       </div>
-      <img src="profile-pic-url" alt="User Profile" className="w-8 h-8 rounded-full" />
+
+        <SignedIn>
+          <div className="flex items-center space-x-2">
+            <UserButton showName />
+          </div>
+        </SignedIn>
+    
     </div>
   );
 }

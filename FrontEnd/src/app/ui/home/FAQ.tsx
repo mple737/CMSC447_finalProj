@@ -1,28 +1,28 @@
 "use client";
-
+//this is the FAQ section it will display all of the common question about our website
 import React, { useState } from 'react';
 
 const FAQ: React.FC = () => {
   const faqs: { question: string; answer: string }[] = [
     {
-      question: "What is your return policy?",
-      answer: "You can return any item within 30 days of purchase for a full refund."
+      question: "What is Supportlify?",
+      answer: "Supportlify is an IT Helpdesk solution that allows users to create, manage, and resolve support tickets, connecting contacts with administrators for efficient assistance."
     },
     {
-      question: "How do I track my order?",
-      answer: "Once your order is shipped, you will receive an email with a tracking link."
+      question: "How do I create a support ticket?",
+      answer: "To create a support ticket, log in to your Supportlify account and select the 'Create Ticket' option. Provide details such as the title and body of the ticket, and you can also include images or links if necessary."
     },
     {
-      question: "Can I change my order after it's been placed?",
-      answer: "If your order has not yet been processed, you can change it by contacting customer service."
+      question: "Can I edit my ticket after submission?",
+      answer: "Contact users cannot edit tickets after submission, but administrators can update ticket details, including type, category, status, and assignment."
     },
     {
-      question: "What payment methods do you accept?",
-      answer: "We accept Visa, MasterCard, American Express, and PayPal."
+      question: "What user roles are available?",
+      answer: "There are two user roles: Contact and Administrator. Contacts can create and view tickets, while Administrators have the ability to edit tickets and user roles, and communicate directly with contacts."
     },
     {
-      question: "Do you ship internationally?",
-      answer: "Yes, we ship to most countries worldwide."
+      question: "How do I create an account?",
+      answer: "To create an account, sign up as a Contact user. Your account may later be promoted to an Administrator by an existing Administrator if needed."
     }
   ];
 
@@ -42,6 +42,7 @@ const FAQ: React.FC = () => {
     <div className="absolute inset-0 bg-black bg-opacity-45 flex flex-col justify-center items-center p-6">
         <h2 className="text-4xl font-bold mb-6 text-center text-white"> Frequently Asked Questions </h2>
         <div className="space-y-4 w-full max-w-xl">
+         
           {faqs.map((faq, index: number) => (
             <div key={index} className="border rounded-lg shadow-md overflow-hidden">
               <button
@@ -62,6 +63,8 @@ const FAQ: React.FC = () => {
               </div>
             </div>
           ))}
+       
+       
         </div>
       </div>
 

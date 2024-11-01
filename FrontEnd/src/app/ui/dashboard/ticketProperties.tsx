@@ -1,7 +1,7 @@
 // TicketProperties.js jsut testing
 import React from 'react';
 
-export default function TicketProperties() {
+const TicketProperties = () => {
   return (
     <div className="w-1/4 p-4 bg-gray-100 h-screen overflow-y-auto">
       <h2 className="text-lg font-bold mb-4">Ticket Properties</h2>
@@ -29,3 +29,4 @@ export default function TicketProperties() {
     </div>
   );
 }
+export default TicketProperties;

@@ -11,6 +11,7 @@ const About = () => {
           <div className="md:w-1/2 mb-8 md:mb-0">
             <h2 className="text-3xl font-semibold mb-4 text-black">ABOUT US</h2>
             <p className="text-lg leading-relaxed text-black">
+              
               Welcome to our AI-powered User Management Platform! Streamline user
               roles, support tickets, and messaging with ease. Stay connected
               with features like role management, a contacts list, and
