@@ -5,7 +5,7 @@
 import React, { useState, useRef, useEffect } from "react";
 
 export default function SlidingServices() {
-  const services = ["Consulting", "Development", "Marketing", "Support", "Design", "Strategy"];
+  const services = ["Consulting", "Development", "Marketing", "Support", "Strategy"];
   const [currentIndex, setCurrentIndex] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
 
