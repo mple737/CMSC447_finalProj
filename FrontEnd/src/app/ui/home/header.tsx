@@ -31,7 +31,7 @@ const Header = () => {
   return (
     <header className="fixed top-0 left-0 right-0 p-0 bg-white bg-opacity-90 flex justify-between items-center z-50">
       
-      <div className="ml-4 cursor-pointer">
+      <div className="ml-2 cursor-pointer">
         <Image 
           
           src="/logo/logo.png" 

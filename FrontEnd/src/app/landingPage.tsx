@@ -4,7 +4,7 @@ import About from "./ui/home/about";
 import ContactForm from "./ui/home/contactForm";
 import FAQ from "./ui/home/FAQ";
 import Header from "./ui/home/header";
-
+import ServiceSlider from "./ui/home/services";
 
 export default function Home() {
 // Design the website layout to match NETLIFY's style
@@ -19,6 +19,7 @@ export default function Home() {
       <Header /> 
       <HomePage />
       <Demo />
+      <ServiceSlider />
       <About />
       <FAQ />  
       <ContactForm />
