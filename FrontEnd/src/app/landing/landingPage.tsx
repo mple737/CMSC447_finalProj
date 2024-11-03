@@ -1,10 +1,10 @@
-import HomePage from "./ui/home/homepage";
-import Demo from "./ui/home/demo";
-import About from "./ui/home/about";
-import ContactForm from "./ui/home/contactForm";
-import FAQ from "./ui/home/FAQ";
-import Header from "./ui/home/header";
-import ServiceSlider from "./ui/home/services";
+import HomePage from "./home/homepage";
+import Demo from "./home/demo";
+import About from "./home/about";
+import ContactForm from "./home/contactForm";
+import FAQ from "./home/FAQ";
+import Header from "./home/header";
+import ServiceSlider from "./home/services";
 
 export default function Home() {
 // Design the website layout to match NETLIFY's style

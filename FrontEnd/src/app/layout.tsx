@@ -4,9 +4,9 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider, SignedIn, SignedOut } from "@clerk/nextjs";
-import LandingPage from "./landingPage";
+import LandingPage from "./landing/landingPage";
 
-import Footer from "./ui/home/footer";
+import Footer from "./landing/home/footer";
 
 const inter = Inter({ subsets: ["latin"] });
 

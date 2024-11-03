@@ -1,10 +1,11 @@
 // Dashboard.js jsut testing no funtionality yet
+"use client";
 import React from 'react';
-import Sidebar from './SideBar';
-import Header from './header';
-import TicketProperties from './ticketProperties';
-import TicketConversation from './TicketConversation';
-import { SignedIn } from "@clerk/nextjs";
+import Sidebar from '../../Component/SideBar';
+import Header from '../../Component/header';
+import TicketProperties from '../../Component/ticketProperties';
+import TicketConversation from '../../Component/TicketConversation';
+
 
 export default function Dashboard() {
   return (

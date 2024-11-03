@@ -1,5 +1,7 @@
 // src/app/page.tsx
-import Dashboard from "./ui/dashboard/page"; // Importing the dashboard component
+"use client";
+
+import Dashboard from "./dashboard/page"; // Importing the dashboard component
 
 export default function Home() {
   // This page will render the appropriate component based on user authentication status.
