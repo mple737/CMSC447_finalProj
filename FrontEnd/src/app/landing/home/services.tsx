@@ -7,43 +7,43 @@ export default function ServicePage() {
   const services = [
     {
       title: "IT Services",
-      description: "Providing reliable and innovative technology solutions to enhance operational efficiency, streamline processes, and drive digital transformation for businesses of all sizes.",
+      description: "",
     },
     {
       title: "Healthcare",
-      description: "Delivering innovative solutions tailored to the healthcare industry, focusing on improving patient outcomes, optimizing workflows, and ensuring compliance with regulations.",
+      description: ".",
     },
     {
       title: "Education",
-      description: "Creating e-learning platforms and educational technology solutions that foster interactive learning experiences, enhance student engagement, and facilitate remote education.",
+      description: ".",
     },
     {
       title: "Finance",
-      description: "Offering expert financial consulting services and technology integration that help organizations manage their financial operations, optimize budgeting, and ensure regulatory compliance.",
+      description: ".",
     },
     {
       title: "E-commerce",
-      description: "Building and optimizing online stores for success, focusing on user experience, payment integration, and marketing strategies to boost sales and customer retention.",
+      description: ".",
     },
     {
       title: "Marketing",
-      description: "Developing strategic marketing campaigns that enhance brand visibility and engagement, leveraging data analytics and digital channels to reach target audiences effectively.",
+      description: ".",
     },
     {
       title: "Real Estate",
-      description: "Providing comprehensive solutions for the real estate industry, including property management software, virtual tours, and marketing strategies to connect buyers and sellers.",
+      description: ".",
     },
     {
       title: "Manufacturing",
-      description: "Implementing smart manufacturing solutions that enhance productivity, improve supply chain management, and ensure quality control through advanced technologies.",
+      description: ".",
     },
     {
       title: "Logistics",
-      description: "Streamlining logistics operations with technology solutions that improve inventory management, enhance delivery tracking, and optimize supply chain efficiency.",
+      description: ".",
     },
     {
       title: "Travel & Hospitality",
-      description: "Delivering tailored technology solutions for the travel and hospitality sector, focusing on enhancing customer experiences, managing bookings, and improving operational efficiency.",
+      description: ".",
     },
   ];
 

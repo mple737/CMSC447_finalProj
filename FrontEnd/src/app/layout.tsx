@@ -5,6 +5,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider, SignedIn, SignedOut } from "@clerk/nextjs";
 import LandingPage from "./landing/landingPage";
+import { ThemeProvider } from "./Theme/page"; // Import ThemeProvider
 
 import Footer from "./landing/home/footer";
 
@@ -21,6 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+    <ThemeProvider> 
     <ClerkProvider>
       <html lang="en">
         <body className={`${inter.className}`}>
@@ -43,5 +45,7 @@ export default function RootLayout({
         </body>
       </html>
     </ClerkProvider>
+
+    </ThemeProvider>
   );
 }
