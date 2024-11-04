@@ -4,7 +4,7 @@ import { SignedIn, UserButton } from "@clerk/nextjs";
 
 export default function Header() {
   return (
-    <div className="flex justify-between items-center p-6 bg-white shadow-lg rounded-b-lg">
+    <div className="flex justify-between items-center p-6 bg-white shadow-lg ">
       {/* Left Section: Dropdown and Search */}
       <div className="flex space-x-4 items-center">
         {/* Department Dropdown */}
