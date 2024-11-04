@@ -17,7 +17,7 @@ const Sidebar = () => {
         <Link href="/history" className="flex items-center space-x-2 hover:bg-gray-700 p-2 rounded">
           <FaBook /> <span>History</span>
         </Link>
-        <Link href="/settings" className="flex items-center space-x-2 hover:bg-gray-700 p-2 rounded">
+        <Link href="/setting" className="flex items-center space-x-2 hover:bg-gray-700 p-2 rounded">
           <FaCog /> <span>Settings</span>
         </Link>
       </nav>

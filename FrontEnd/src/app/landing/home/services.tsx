@@ -1,82 +1,115 @@
 "use client";
 
-//Still figureing out how to fix and make this look better
-//working on dashvboard now
-import React, { useState, useRef, useEffect } from "react";
+import React, { useRef } from "react";
+import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 
-export default function SlidingServices() {
-  const services = ["Consulting", "Development", "Marketing", "Support", "Strategy"];
-  const [currentIndex, setCurrentIndex] = useState(0);
+export default function ServicePage() {
+  const services = [
+    {
+      title: "IT Services",
+      description: "Providing reliable and innovative technology solutions to enhance operational efficiency, streamline processes, and drive digital transformation for businesses of all sizes.",
+    },
+    {
+      title: "Healthcare",
+      description: "Delivering innovative solutions tailored to the healthcare industry, focusing on improving patient outcomes, optimizing workflows, and ensuring compliance with regulations.",
+    },
+    {
+      title: "Education",
+      description: "Creating e-learning platforms and educational technology solutions that foster interactive learning experiences, enhance student engagement, and facilitate remote education.",
+    },
+    {
+      title: "Finance",
+      description: "Offering expert financial consulting services and technology integration that help organizations manage their financial operations, optimize budgeting, and ensure regulatory compliance.",
+    },
+    {
+      title: "E-commerce",
+      description: "Building and optimizing online stores for success, focusing on user experience, payment integration, and marketing strategies to boost sales and customer retention.",
+    },
+    {
+      title: "Marketing",
+      description: "Developing strategic marketing campaigns that enhance brand visibility and engagement, leveraging data analytics and digital channels to reach target audiences effectively.",
+    },
+    {
+      title: "Real Estate",
+      description: "Providing comprehensive solutions for the real estate industry, including property management software, virtual tours, and marketing strategies to connect buyers and sellers.",
+    },
+    {
+      title: "Manufacturing",
+      description: "Implementing smart manufacturing solutions that enhance productivity, improve supply chain management, and ensure quality control through advanced technologies.",
+    },
+    {
+      title: "Logistics",
+      description: "Streamlining logistics operations with technology solutions that improve inventory management, enhance delivery tracking, and optimize supply chain efficiency.",
+    },
+    {
+      title: "Travel & Hospitality",
+      description: "Delivering tailored technology solutions for the travel and hospitality sector, focusing on enhancing customer experiences, managing bookings, and improving operational efficiency.",
+    },
+  ];
+
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  // Update the currentIndex based on the scroll position
-  const handleScroll = () => {
+  const scrollLeft = () => {
     if (scrollRef.current) {
-      const scrollLeft = scrollRef.current.scrollLeft;
-      const itemWidth = (scrollRef.current.firstChild as HTMLDivElement)?.clientWidth + 24; // 24px is the space between items
-      const index = Math.round(scrollLeft / itemWidth);
-      setCurrentIndex(index);
-    }
-  };
-
-  // Scroll to a specific item when a dot is clicked
-  const scrollToIndex = (index: number) => {
-    if (scrollRef.current) {
-      const itemWidth = (scrollRef.current.firstChild as HTMLDivElement)?.clientWidth + 24;
-      scrollRef.current.scrollTo({
-        left: itemWidth * index,
+      scrollRef.current.scrollBy({
+        left: -300,
         behavior: "smooth",
       });
-      setCurrentIndex(index);
     }
   };
 
-  useEffect(() => {
-    const scrollElement = scrollRef.current;
-    if (scrollElement) {
-      scrollElement.addEventListener("scroll", handleScroll);
+  const scrollRight = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({
+        left: 300,
+        behavior: "smooth",
+      });
     }
-    return () => {
-      if (scrollElement) {
-        scrollElement.removeEventListener("scroll", handleScroll);
-      }
-    };
-  }, []);
+  };
 
   return (
-    <div className="bg-[#f9f5f0] py-10 overflow-hidden">
-      <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">
-        Industries We Service
-      </h2>
+    <div
+      className="flex flex-col items-center w-full py-8 bg-cover bg-no-repeat bg-center"
+      style={{ backgroundImage: "url('/logo/Capture.PNG')" }}
+    >
+      <h1 className="text-3xl md:text-4xl font-bold text-center py-4 text-white">Industries We Serve</h1>
 
-      {/* Scrolling container */}
-      <div
-        ref={scrollRef}
-        className="flex space-x-6 overflow-x-scroll snap-x snap-mandatory scrollbar-hide px-4"
-      >
-        {services.map((service, index) => (
-          <div
-            key={index}
-            className="bg-gray-200 p-4 rounded-lg shadow-lg text-center font-semibold text-gray-800 
-                       min-w-[120px] sm:min-w-[150px] md:min-w-[180px] lg:min-w-[200px] max-w-[200px] 
-                       text-lg sm:text-xl flex items-center justify-center snap-center"
-          >
-            {service}
-          </div>
-        ))}
-      </div>
+      <div className="relative flex items-center w-full max-w-7xl px-4 md:px-8 lg:px-12">
+        {/* Left arrow */}
+        <button
+          onClick={scrollLeft}
+          className="absolute -left-8 md:-left-10 z-10 p-2 md:p-3 rounded-full bg-white shadow-md text-gray-600 hover:text-black transition"
+          aria-label="Scroll left"
+        >
+          <IoChevronBack size={24} />
+        </button>
 
-      {/* Indicator dots */}
-      <div className="flex justify-center mt-4 space-x-2">
-        {services.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => scrollToIndex(index)}
-            className={`w-3 h-3 rounded-full transition-colors ${
-              currentIndex === index ? "bg-gray-800" : "bg-gray-400"
-            }`}
-          ></button>
-        ))}
+        {/* Scrolling container for services */}
+        <div
+          ref={scrollRef}
+          className="flex overflow-x-scroll snap-x snap-mandatory scrollbar-hide p-4 w-full space-x-6 hide-scrollbar"
+        >
+          {services.map((service, index) => (
+            <div
+              key={index}
+              className="flex-none w-60 sm:w-72 lg:w-80 h-64 bg-gradient-to-b from-white to-gray-100 rounded-lg shadow-lg snap-center flex flex-col p-6 transition-transform transform hover:scale-105"
+            >
+              {/* Service title */}
+              <h2 className="text-xl font-semibold text-gray-800 mb-2">{service.title}</h2>
+              {/* Service description */}
+              <p className="text-sm text-gray-700">{service.description}</p>
+            </div>
+          ))}
+        </div>
+
+        {/* Right arrow */}
+        <button
+          onClick={scrollRight}
+          className="absolute -right-8 md:-right-10 z-10 p-2 md:p-3 rounded-full bg-white shadow-md text-gray-600 hover:text-black transition"
+          aria-label="Scroll right"
+        >
+          <IoChevronForward size={24} />
+        </button>
       </div>
     </div>
   );

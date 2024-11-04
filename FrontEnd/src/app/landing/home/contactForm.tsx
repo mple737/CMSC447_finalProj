@@ -12,7 +12,6 @@ interface ContactFormInputs {
 }
 
 const ContactSection: React.FC = () => {
-
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
@@ -32,10 +31,7 @@ const ContactSection: React.FC = () => {
   const [message, setMessage] = useState("");
 
   const onSubmit: SubmitHandler<ContactFormInputs> = async (data) => {
-     // Web3Forms API endpoint
     const API_URL = "https://api.web3forms.com/submit";
-
-    // Accessing the API key
     const API_KEY = process.env.NEXT_PUBLIC_ACCESS_KEY; 
 
     try {
@@ -60,19 +56,14 @@ const ContactSection: React.FC = () => {
         }, 5000);
 
       } else {
-        // Handle error
         setIsSuccess(false);
         setMessage("Error sending message. Please try again later.");
       }
     } catch (error) {
-     
-      // Handle network error
       console.error("Submission error:", error);
       setIsSuccess(false);
       setMessage("Network error. Please check your connection.");
-
     }
-    
   };
 
   if (!isClient) return null; // Prevent server-side rendering of client-specific code
@@ -80,17 +71,22 @@ const ContactSection: React.FC = () => {
   return (
     <main className="flex w-full h-screen bg-white">
       <div className="relative w-full flex flex-col justify-center items-center h-full p-6">
-        <div className="max-w-7xl mx-auto flex flex-col items-center px-6 md:px-12">
-         
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center px-6 md:px-12">
+          {/* Left Side Message Section */}
+          <div className="md:w-1/2 p-6">
+            <h1 className="text-4xl font-semibold mb-4 text-black">Want to contact us?</h1>
+            <p className="text-lg leading-relaxed text-black">
+              We’re here to help you! Whether you have questions about our services or need support, feel free to reach out. 
+              Our team aims to respond within 24 hours. You can also explore our FAQ section for quick answers.
+            </p>
+     
+          </div>
+
           {/* Contact Form Section */}
-          <div id="contact-form" className="w-full max-w-lg p-8 mt-10 rounded-lg ">
-
-            <h1 className="text-4xl font-semibold mb-8 text-black"> Want to contact us? </h1> {/* Increased size */}
-
+          <div id="contact-form" className="md:w-1/2 w-full max-w-lg p-8 mt-10 rounded-lg">
             <form onSubmit={handleSubmit(onSubmit)}>
-           
-               <div className="mb-4">
-               <input
+              <div className="mb-4">
+                <input
                   type="text"
                   placeholder="Subject"
                   className={`w-full px-4 py-3 border-2 placeholder:text-gray-400 text-black rounded-md outline-none focus:ring-4 transition duration-200 ${
@@ -101,7 +97,6 @@ const ContactSection: React.FC = () => {
                     maxLength: { value: 100, message: "Max length is 100" },
                   })}
                 />
-
                 {errors.subject && (
                   <div className="mt-1 text-red-600">
                     <small>{errors.subject.message}</small>
@@ -123,7 +118,7 @@ const ContactSection: React.FC = () => {
                 />
                 {errors.name && (
                   <div className="mt-1 text-red-600">
-                    <small> {errors.name.message} </small>
+                    <small>{errors.name.message}</small>
                   </div>
                 )}
               </div>
@@ -138,23 +133,18 @@ const ContactSection: React.FC = () => {
                   {...register("email", {
                     required: "Enter your email",
                     pattern: {
-                     
                       value: /^\S+@\S+$/i,
                       message: "Please enter a valid email",
-
                     },
                   })}
                 />
                 {errors.email && (
                   <div className="mt-1 text-red-600">
-                   
-                    <small> {errors.email.message} </small>
-
+                    <small>{errors.email.message}</small>
                   </div>
                 )}
               </div>
 
-             
               <div className="mb-4">
                 <textarea
                   placeholder="Your Message"
@@ -175,7 +165,6 @@ const ContactSection: React.FC = () => {
               <button
                 type="submit"
                 className="w-full py-3 font-semibold text-white transition-colors bg-gradient-to-r from-purple-700 to-blue-700 rounded-lg hover:from-purple-600 hover:to-blue-800 focus:outline-none transition duration-200"
-
               >
                 {isSubmitting ? "Sending..." : "Send Message"}
               </button>
@@ -183,12 +172,11 @@ const ContactSection: React.FC = () => {
             
             {isSubmitSuccessful && (
               <div className="mt-3 text-sm text-center">
-                <div className={`text-${isSuccess ? 'green' : 'red'} -500`}>
+                <div className={`text-${isSuccess ? 'green' : 'red'}-500`}>
                   {message || (isSuccess ? "Success. Message sent successfully." : "Something went wrong. Please try later.")}
                 </div>
               </div>
             )}
-
           </div>
         </div>
       </div>

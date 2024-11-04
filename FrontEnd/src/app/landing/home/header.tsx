@@ -29,15 +29,16 @@ const Header = () => {
 
 
   return (
-    <header className="fixed top-0 left-0 right-0 p-0 bg-white bg-opacity-90 flex justify-between items-center z-50">
+    <header className="fixed top-0 left-0 right-0 p-0 bg-white bg-opacity-90 flex justify-between items-center z-50 shadow-md"> {/* Changed p-0 to p-1 */}
+
       
       <div className="ml-2 cursor-pointer">
         <Image 
           
           src="/logo/logo.png" 
           alt="Supportlify Logo"
-          width={110} 
-          height={50}
+          width={85} 
+          height={30}
         
         />
       </div>
@@ -46,10 +47,10 @@ const Header = () => {
       <nav className={`hidden md:flex space-x-12 ml-auto mr-8 ${isMobileMenuOpen ? "block" : "hidden"} md:block`}>
        
         <Link href="/homepage" className="font-semibold uppercase text-black hover:text-gray-600 transition duration-200"> Home </Link>
-        
-        <Link href="/about" className="font-semibold uppercase text-black hover:text-gray-600 transition duration-200"> About Us </Link>
-        
+              
         <Link href="/services" className="font-semibold uppercase text-black hover:text-gray-600 transition duration-200"> Services </Link>
+
+        <Link href="/about" className="font-semibold uppercase text-black hover:text-gray-600 transition duration-200"> About Us </Link>
         
         <Link href="/FAQ" className="font-semibold uppercase text-black hover:text-gray-600 transition duration-200"> FAQ </Link>
         
@@ -57,10 +58,10 @@ const Header = () => {
       </nav>
 
      
-      <div className="flex items-center space-x-4 mr-4">
+      <div className="flex items-center space-x-2 mr-4">
         <SignedOut>
          
-          <div className="px-4 py-2 bg-gradient-to-r from-purple-700 to-blue-700 text-white rounded-lg hover:from-purple-600 hover:to-blue-800 transition duration-200">
+          <div className="px-2 py-1 bg-gradient-to-r from-purple-700 to-blue-700 text-white rounded-lg hover:from-purple-600 hover:to-blue-800 transition duration-200">
           
             <SignInButton mode="modal">Log In</SignInButton>
           
@@ -69,7 +70,7 @@ const Header = () => {
         
         <SignedIn>
           
-          <div className="px-4 py-2 bg-gradient-to-r from-purple-700 to-blue-700 text-white rounded-lg hover:from-purple-600 hover:to-blue-800 transition duration-200">
+          <div className="px-2 py-1 bg-gradient-to-r from-purple-700 to-blue-700 text-white rounded-lg hover:from-purple-600 hover:to-blue-800 transition duration-200">
             <UserButton showName />
          
           </div>
@@ -77,7 +78,7 @@ const Header = () => {
 
         {/* Mobile Menu Option */}
         <button 
-          className="md:hidden p-2 rounded-md text-black hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" 
+          className="md:hidden p-1 rounded-md text-black hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" 
          
           onClick={toggleMobileMenu}
         >
@@ -91,13 +92,13 @@ const Header = () => {
         
         <div className="absolute top-20 right-4 bg-white shadow-lg rounded-lg md:hidden">
          
-          <nav className="flex flex-col space-y-2 p-4">
+          <nav className="flex flex-col space-y-2 p-3">
            
             <Link href="/homePage" className="font-semibold uppercase text-black hover:text-gray-600 transition duration-200"> Home </Link>
            
+            <Link href="/services" className="font-semibold uppercase text-black hover:text-gray-600 transition duration-200"> Services </Link>\
+
             <Link href="/about" className="font-semibold uppercase text-black hover:text-gray-600 transition duration-200"> About Us </Link>
-           
-            <Link href="/services" className="font-semibold uppercase text-black hover:text-gray-600 transition duration-200"> Services </Link>
            
             <Link href="/faq" className="font-semibold uppercase text-black hover:text-gray-600 transition duration-200"> FAQ </Link>
            
