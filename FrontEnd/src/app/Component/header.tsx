@@ -1,6 +1,6 @@
 // Header.js
 import React from 'react';
-import { SignedIn, UserButton } from "@clerk/nextjs";
+import { SignedIn, UserButton, OrganizationSwitcher } from "@clerk/nextjs";
 
 export default function Header() {
   return (
@@ -8,11 +8,14 @@ export default function Header() {
       {/* Left Section: Dropdown and Search */}
       <div className="flex space-x-4 items-center">
         {/* Department Dropdown */}
-        <select className="p-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-700 focus:outline-none focus:border-gray-400">
+        {/*<select className="p-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-700 focus:outline-none focus:border-gray-400">
           <option>All Departments</option>
           <option>Support</option>
           <option>Sales</option>
-        </select>
+        </select>*/}
+        <div className="flex flex-col items-center text-gray-700 gap-2">
+        <OrganizationSwitcher />
+        </div>
 
         {/* Search Input */}
         <input

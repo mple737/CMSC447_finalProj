@@ -3,33 +3,39 @@ import React, { useState } from 'react';
 import Sidebar from '../../Component/SideBar';
 import Header from '../../Component/header';
 
+import { useUser, useOrganization } from '@clerk/nextjs' 
+
 const CreateTicket: React.FC = () => {
-  const [contactName, setContactName] = useState<string>('');
-  const [email, setEmail] = useState<string>('');
-  const [phone, setPhone] = useState<string>('');
-  const [subject, setSubject] = useState<string>('');
-  const [description, setDescription] = useState<string>('');
+  const [title, setTitle] = useState<string>('');
+  const [body, setDescription] = useState<string>('');
   const [successMessage, setSuccessMessage] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState<string>('');
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+  const { user } = useUser()
+  const { organization } = useOrganization()
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
   
     const ticketData = {
-      contactName,
-      email,
-      phone,
-      subject,
-      description,
+      organizationId: organization?.id,
+      title,
+      body,
+      userId: user?.id
     };
-  
-    console.log('Ticket Created:', ticketData);
+
+    await fetch('http://localhost:3500/tickets', {
+      method:'POST',
+      headers:{
+        "Content-Type": "application/json"
+      },
+      body:JSON.stringify(ticketData)
+    })
+    
+    console.log('Ticket Created:', JSON.stringify(ticketData));
     setSuccessMessage('Ticket created successfully!');
     setErrorMessage('');
-    setContactName('');
-    setEmail('');
-    setPhone('');
-    setSubject('');
+    setTitle('');
     setDescription('');
   
     // Set a timeout to clear the success message after 5 seconds
@@ -65,43 +71,11 @@ const CreateTicket: React.FC = () => {
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="flex space-x-4">
                 <div className="flex-1">
-                  <label className="block text-gray-700 font-semibold">Customer Name</label>
-                  <input
-                    type="text"
-                    value={contactName}
-                    onChange={(e) => setContactName(e.target.value)}
-                    required
-                    className="mt-1 block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-black"
-                  />
-                </div>
-                <div className="flex-1">
-                  <label className="block text-gray-700 font-semibold">Email</label>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    className="mt-1 block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-black"
-                  />
-                </div>
-              </div>
-              <div className="flex space-x-4">
-                <div className="flex-1">
                   <label className="block text-gray-700 font-semibold">Subject</label>
                   <input
                     type="text"
-                    value={subject}
-                    onChange={(e) => setSubject(e.target.value)}
-                    required
-                    className="mt-1 block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-black"
-                  />
-                </div>
-                <div className="flex-1">
-                  <label className="block text-gray-700 font-semibold">Phone</label>
-                  <input
-                    type="text"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
                     required
                     className="mt-1 block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-black"
                   />
@@ -110,7 +84,7 @@ const CreateTicket: React.FC = () => {
               <div>
                 <label className="block text-gray-700 font-semibold">Description</label>
                 <textarea
-                  value={description}
+                  value={body}
                   onChange={(e) => setDescription(e.target.value)}
                   required
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-black"

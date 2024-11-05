@@ -1,4 +1,5 @@
 const {prisma, mongoose} = require('../prisma/clients')
+const { clerkClient } = require('@clerk/express')
 const asyncHandler = require('express-async-handler')
 
 // @desc Get all notes
@@ -38,6 +39,8 @@ const createNewNote = asyncHandler(async(req, res) => {
     }
 
     const { userId, body } = req.body
+    const userName = await clerkClient.users.getUser(userId).fullName
+
     const ticket = await prisma.ticket.update({
         where: {
             id: ticketId
@@ -46,6 +49,7 @@ const createNewNote = asyncHandler(async(req, res) => {
             notes: {
                 create: {
                     userId,
+                    userName,
                     body
                 }
             }
@@ -87,6 +91,8 @@ const updateNote = asyncHandler(async(req, res) => {
         return res.status(400).json("Note does not exist")
     }
 
+    const userName = await clerkClient.users.getUser(userId).fullName
+
     // Update note
     const updatedNote = await prisma.note.update({
         where: {
@@ -94,6 +100,7 @@ const updateNote = asyncHandler(async(req, res) => {
         },
         data: {
             userId,
+            userName,
             body
         }
     })    

@@ -15,20 +15,24 @@ datasource db {
 
 model Ticket {
   id String @id @default(auto()) @map("_id") @db.ObjectId
+  organizationId String
   createdDate DateTime @default(now())
   title String
   body String
-  contactId String
+  userId String
+  userName String
   type String?
   category String?
-  status String?
+  status String @default("Open")
   assignedToId String?
+  assignedToName String?
   notes Note[]
 }
 
 model Note {
   id String @id @default(auto()) @map("_id") @db.ObjectId
   userId String
+  userName String
   body String
   ticket Ticket @relation(fields: [ticketId], references: [id])
   ticketId String @db.ObjectId
