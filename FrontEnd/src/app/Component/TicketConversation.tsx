@@ -1,10 +1,11 @@
 // TicketConversation.js jsut testing
 "use client";
-import { useOrganization, useUser } from "@clerk/nextjs";
+import { useOrganization, useUser, useAuth } from "@clerk/nextjs";
 import { clerkClient } from "@clerk/nextjs/server";
 import { useState, useEffect } from "react";
 import useSWR from "swr";
-import Date from './Date'
+import Date from "./Date";
+import internal from "stream";
 
 type Ticket = {
   id: string;
@@ -19,6 +20,7 @@ type Ticket = {
   status: string;
   assignedToId: string;
   assignedToName: string;
+  ticketNumber: number;
   notes: Note[];
 };
 
@@ -34,6 +36,7 @@ type Note = {
 const TicketConversation = () => {
   const { user, isSignedIn, isLoaded } = useUser();
   const { organization } = useOrganization();
+  const { getToken } = useAuth()
 
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -45,6 +48,10 @@ const TicketConversation = () => {
         `http://localhost:3500/tickets?organizationId=${organization?.id}`,
         {
           method: "GET",
+          headers: {
+            Authorization: `Bearer ${await getToken()}`,
+            "Content-Type": "application/json",
+          },
         }
       )
         .then((res) => res.json())
@@ -57,6 +64,7 @@ const TicketConversation = () => {
   }, []);
 
   if (loading || error) {
+    // Add loading spinner possibly
     return null;
   }
 
@@ -74,9 +82,9 @@ const TicketConversation = () => {
         <li key={ticket.id}>
           <div className="flex-1 p-4 space-y-6">
             <div className="bg-white p-4 rounded shadow">
-              <h2 className="text-xl font-bold text-black">{ticket.title}</h2>
+              <h2 className="text-xl font-bold text-black">#{ticket.ticketNumber} - {ticket.title}</h2>
               <p className="text-sm text-gray-500">
-                <Date dateString={ticket.createdDate}/>
+                <Date dateString={ticket.createdDate} />
               </p>
               <div className="mt-4 text-gray-500">
                 <p>

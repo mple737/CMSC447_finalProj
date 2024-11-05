@@ -23,7 +23,7 @@ export default function RootLayout({
 }>) {
   return (
     <ThemeProvider> 
-    <ClerkProvider>
+    <ClerkProvider dynamic>
       <html lang="en">
         <body className={`${inter.className}`}>
           <div className="flex flex-col min-h-screen">

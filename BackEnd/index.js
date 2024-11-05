@@ -25,10 +25,10 @@ app.use('/', express.static(path.join(__dirname, '/public')))
 app.use('/', require('./routes/root'))
 
 // Tickets route
-app.use('/tickets', require('./routes/ticketRoutes'))
+app.use('/tickets', requireAuth(), require('./routes/ticketRoutes'))
 
 // Single ticket by id
-app.get('/tickets/:id/', async(req, res) => {
+app.get('/tickets/:id/', requireAuth(), async(req, res) => {
     const { id } = req.params
     if(!mongoose.isValidObjectId(id)) {
         return res.status(400).json({message:"Invalid Object ID"})
@@ -40,14 +40,14 @@ app.get('/tickets/:id/', async(req, res) => {
     })
 
     if(!ticket) {
-        return res.json("Ticket does not exist")
+        return res.status(400).json({message:"Ticket does not exist"})
     }
 
     res.json(ticket)
 })
 
 // Notes route
-app.use('/tickets/:ticketId/notes', require('./routes/noteRoutes'))
+app.use('/tickets/:ticketId/notes', requireAuth(), require('./routes/noteRoutes'))
 
 // 404 Handling
 app.all('*', (req, res) => {

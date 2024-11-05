@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import Sidebar from '../../Component/SideBar';
 import Header from '../../Component/header';
 
-import { useUser, useOrganization } from '@clerk/nextjs' 
+import { useUser, useOrganization, useAuth } from '@clerk/nextjs' 
 
 const CreateTicket: React.FC = () => {
   const [title, setTitle] = useState<string>('');
@@ -13,6 +13,7 @@ const CreateTicket: React.FC = () => {
 
   const { user } = useUser()
   const { organization } = useOrganization()
+  const { getToken } = useAuth()
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
@@ -27,6 +28,7 @@ const CreateTicket: React.FC = () => {
     await fetch('http://localhost:3500/tickets', {
       method:'POST',
       headers:{
+        Authorization: `Bearer ${await getToken()}`,
         "Content-Type": "application/json"
       },
       body:JSON.stringify(ticketData)

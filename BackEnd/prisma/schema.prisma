@@ -26,6 +26,7 @@ model Ticket {
   status String @default("Open")
   assignedToId String?
   assignedToName String?
+  ticketNumber Int?
   notes Note[]
 }
 
