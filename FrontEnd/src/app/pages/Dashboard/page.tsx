@@ -17,7 +17,6 @@ export default function Dashboard() {
         <Header />
 
         <div className="flex flex-1">
-          <TicketProperties />
           <TicketConversation />
         </div>
       </div>

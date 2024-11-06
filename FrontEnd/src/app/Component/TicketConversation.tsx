@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import useSWR from "swr";
 import Date from "./Date";
 import internal from "stream";
+import Link from 'next/link'
 
 type Ticket = {
   id: string;
@@ -65,23 +66,36 @@ const TicketConversation = () => {
 
   if (loading || error) {
     // Add loading spinner possibly
-    return null;
+    <div className="flex flex-1 flex-col md:flex-row md:space-x-8 p-4 md:p-8 overflow-y-auto hide-scrollbar">
+          <div className="flex-1 bg-white p-6 rounded-lg shadow-lg overflow-y-auto hide-scrollbar">
+            <h1 className="text-2xl md:text-3xl font-bold mb-4 text-gray-800">Tickets</h1></div></div>
   }
 
   if (!user || !isSignedIn || !isLoaded) {
-    return null;
+    <div className="flex flex-1 flex-col md:flex-row md:space-x-8 p-4 md:p-8 overflow-y-auto hide-scrollbar">
+          <div className="flex-1 bg-white p-6 rounded-lg shadow-lg overflow-y-auto hide-scrollbar">
+            <h1 className="text-2xl md:text-3xl font-bold mb-4 text-gray-800">Tickets</h1></div></div>
   }
 
   if (!organization) {
-    return null;
+    <div className="flex flex-1 flex-col md:flex-row md:space-x-8 p-4 md:p-8 overflow-y-auto hide-scrollbar">
+          <div className="flex-1 bg-white p-6 rounded-lg shadow-lg overflow-y-auto hide-scrollbar">
+            <h1 className="text-2xl md:text-3xl font-bold mb-4 text-gray-800">Tickets</h1></div></div>
   }
 
   return (
-    <ul>
+
+    <div className="flex flex-1 flex-col md:flex-row md:space-x-8 p-4 md:p-8 overflow-y-auto hide-scrollbar">
+          <div className="flex-1 bg-white p-6 rounded-lg shadow-lg overflow-y-auto hide-scrollbar">
+            <h1 className="text-2xl md:text-3xl font-bold mb-4 text-gray-800">Tickets</h1>
+
+      <ul>
       {tickets.map((ticket: Ticket) => (
         <li key={ticket.id}>
+          
           <div className="flex-1 p-4 space-y-6">
-            <div className="bg-white p-4 rounded shadow">
+          <Link href={"/ticket/"+ticket.id}>
+            <div className="p-4 bg-gray-50 rounded-lg shadow-md hover:bg-gray-100">
               <h2 className="text-xl font-bold text-black">#{ticket.ticketNumber} - {ticket.title}</h2>
               <p className="text-sm text-gray-500">
                 <Date dateString={ticket.createdDate} />
@@ -93,19 +107,17 @@ const TicketConversation = () => {
                 <p className="text-gray-700">{ticket.body}</p>
               </div>
               <div className="flex space-x-4 mt-4">
-                <button className="px-4 py-1 bg-blue-500 text-white rounded">
-                  Reply
-                </button>
 
-                <button className="px-4 py-1 bg-red-500 text-white rounded">
-                  Close Ticket
-                </button>
               </div>
             </div>
+            </Link>
           </div>
+        
         </li>
       ))}
     </ul>
+
+    </div></div>
   );
 };
 

@@ -49,6 +49,14 @@ app.get('/tickets/:id/', requireAuth(), async(req, res) => {
 // Notes route
 app.use('/tickets/:ticketId/notes', requireAuth(), require('./routes/noteRoutes'))
 
+app.get('/users/:userId', requireAuth(), async(req, res) => {
+
+    const {userId} = req.params
+
+    const user = await clerkClient.users.getUser(userId)
+    res.json(user)
+})
+
 // 404 Handling
 app.all('*', (req, res) => {
     res.status(404)
