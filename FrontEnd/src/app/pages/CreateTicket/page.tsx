@@ -25,7 +25,7 @@ const CreateTicket: React.FC = () => {
       userId: user?.id
     };
 
-    await fetch('http://localhost:3500/tickets', {
+    await fetch(`http://localhost:3500/tickets/${organization?.id}`, {
       method:'POST',
       headers:{
         Authorization: `Bearer ${await getToken()}`,

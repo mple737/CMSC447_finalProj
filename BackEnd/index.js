@@ -25,10 +25,10 @@ app.use('/', express.static(path.join(__dirname, '/public')))
 app.use('/', require('./routes/root'))
 
 // Tickets route
-app.use('/tickets', requireAuth(), require('./routes/ticketRoutes'))
+app.use('/tickets/:organizationId', requireAuth(), require('./routes/ticketRoutes'))
 
 // Single ticket by id
-app.get('/tickets/:id/', requireAuth(), async(req, res) => {
+app.get('/tickets/:organizationId/:id', requireAuth(), async(req, res) => {
     const { id } = req.params
     if(!mongoose.isValidObjectId(id)) {
         return res.status(400).json({message:"Invalid Object ID"})

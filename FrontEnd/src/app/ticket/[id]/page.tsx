@@ -1,11 +1,11 @@
 import { auth } from "@clerk/nextjs/server";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { TicketPage } from '@/app/Component/TicketPage'
-import  TicketProperties  from '@/app/Component/ticketProperties'
-import Sidebar from '../../Component/SideBar';
-import Header from '../../Component/header';
-export const dynamicParams = true
-import React from 'react';
+import { TicketPage } from "@/app/Component/TicketPage";
+import TicketProperties from "@/app/Component/ticketProperties";
+import Sidebar from "../../Component/SideBar";
+import Header from "../../Component/header";
+export const dynamicParams = true;
+import React from "react";
 export type Ticket = {
   id: string;
   createdDate: string;
@@ -32,37 +32,42 @@ export type Note = {
   ticketId: string;
 };
 
-export default async function Page({params} : {params:Ticket}) {
+export default async function Page({ params }: { params: Ticket }) {
+  const { getToken, orgId } = await auth();
 
-  const { userId, getToken, orgId } = await auth();
+  const ticketId = (await params).id;
 
-  const ticketId = (await params).id
-  console.log
+  const ticket = await fetch(`http://localhost:3500/tickets/${orgId}/${ticketId}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${await getToken()}`,
+      "Content-Type": "application/json",
+    },
+  }).then((res) => res.json());
 
-  const ticket = await fetch(
-    `http://localhost:3500/tickets/${ticketId}`,
-    {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${await getToken()}`,
-        "Content-Type": "application/json",
-      },
-    }
-  ).then((res) => res.json());
+  console.log(ticket.userId)
 
-  return (<div>
-        
+ const user = await fetch(`http://localhost:3500/users/${ticket.userId}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${await getToken()}`,
+      "Content-Type": "application/json",
+    },
+  }).then((res) => res.json());
+
+  return (
+    <div>
       <div className="flex h-screen bg-gray-200">
-      <Sidebar />
-      <div className="flex-1 flex flex-col">
-        <Header />
+        <Sidebar />
+        <div className="flex-1 flex flex-col">
+          <Header />
 
-        <div className="flex flex-1">
-        <TicketProperties props={ticket} />
-          <TicketPage props={ticket}/>
+          <div className="flex flex-1">
+            <TicketProperties ticket={ticket} user={user} />
+            <TicketPage props={ticket} />
+          </div>
         </div>
       </div>
     </div>
-    
-  </div>)
+  );
 }

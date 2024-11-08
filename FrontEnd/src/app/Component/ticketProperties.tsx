@@ -1,39 +1,175 @@
-import React from 'react';
+"use client";
 
-import {  } from '@clerk/nextjs/server'
+import React, { useState } from "react";
+import Date from "@/app/Component/Date";
 
-const TicketProperties = (ticket : any) => {
+import { useUser, useOrganization, useAuth } from "@clerk/nextjs";
+import { getEnabledCategories } from "trace_events";
+import { Catamaran } from "next/font/google";
 
-  
+const TicketProperties: React.FC<{ ticket: any; user: any }> = ({
+  ticket,
+  user,
+}) => {
+  const [type, setType] = useState<string>(ticket.type);
+  const [status, setStatus] = useState(ticket.status);
+  const [category, setCategory] = useState(ticket.category);
+  const [categories, setCategories] = useState([
+    { id: 0, category: "" },
+    { id: 1, category: "Email" },
+    { id: 2, category: "Password" },
+    { id: 3, category: "Software" },
+    { id: 4, category: "Hardware" },
+  ]);
+  const [issues, setIssues] = useState([
+    { id: 0, issue: "" },
+    { id: 1, issue: "Question" },
+    { id: 2, issue: "Problem" },
+    { id: 3, issue: "Notification" },
+  ]);
+  const [statuses, setStatuses] = useState([
+    { id: 0, status: "Open" },
+    { id: 1, status: "Closed" },
+    { id: 2, status: "Pending" },
+  ]);
+  const [assignment, setAssignment] = useState<string>("");
+  const [successMessage, setSuccessMessage] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
+
+  const { organization } = useOrganization();
+  const { getToken } = useAuth();
+
+  const handleSubmit = async (
+    e: React.FormEvent<HTMLFormElement>
+  ): Promise<void> => {
+    e.preventDefault();
+
+    const ticketData = {
+      id: ticket.id,
+      organizationId: ticket.organizationId,
+      type,
+      status,
+      category,
+      assignment,
+    };
+
+    await fetch(`http://localhost:3500/tickets/${organization?.id}`, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${await getToken()}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(ticketData),
+    });
+
+    console.log("Ticket Created:", JSON.stringify(ticketData));
+    setSuccessMessage("Ticket updated successfully!");
+    setErrorMessage("");
+    setType(ticket.type);
+    setStatus(ticket.status);
+    setCategory(ticket.category);
+    setAssignment(ticket.assignedToName);
+
+    // Set a timeout to clear the success message after 5 seconds
+    setTimeout(() => {
+      setSuccessMessage("");
+    }, 2000);
+  };
 
   return (
     <div className="w-full sm:w-1/4 md:w-1/5 min-w-[250px] max-h-screen p-4 bg-gray-50 overflow-y-auto shadow-lg">
-      <h2 className="text-2xl sm:text-xl font-semibold mb-4 text-gray-800">Ticket Properties</h2>
+      <h2 className="text-2xl sm:text-xl font-semibold mb-4 text-gray-800">
+        Ticket Properties
+      </h2>
+
       <div className="grid grid-cols-1 gap-4">
-        {/* Contact Info Card */}
-        <div className="bg-white p-4 shadow-md hover:shadow-lg transition-shadow duration-200 ease-in-out">
-          <h3 className="font-semibold text-lg sm:text-md text-gray-700 mb-1">Contact Info</h3>
-          <p className="text-gray-600 text-sm">{ticket.props.userName}</p>
-          <p className="text-gray-600 text-sm"></p>
-          <p className="text-gray-600 text-sm"></p>
-        </div>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Contact Info Card */}
+          <div className="bg-white p-4 shadow-md hover:shadow-lg transition-shadow duration-200 ease-in-out">
+            <h3 className="font-semibold text-lg sm:text-md text-gray-700 mb-1">
+              Contact Info
+            </h3>
+            <p className="text-gray-600 text-sm">
+              {user.firstName} {user.lastName}
+            </p>
+            <p className="text-gray-600 text-sm">
+              {user.emailAddresses[0].emailAddress}
+            </p>
+            <p className="text-gray-600 text-sm">
+              {user.phoneNumbers[0].phoneNumber}
+            </p>
+          </div>
 
-        {/* Key Information Card */}
-        <div className="bg-white p-4 shadow-md hover:shadow-lg transition-shadow duration-200 ease-in-out">
-          <h3 className="font-semibold text-lg sm:text-md text-gray-700 mb-1">Key Information</h3>
-          <p className="text-gray-600 text-sm">Ticket Owner: Emma</p>
-          <p className="text-gray-600 text-sm">Status: Open</p>
-          <p className="text-gray-600 text-sm">Due Date: 30 Oct 10:00 AM</p>
-          <p className="text-gray-600 text-sm">Tags: Problem, Accommodation</p>
-        </div>
+          {/* Key Information Card */}
+          <div className="bg-white p-4 shadow-md hover:shadow-lg transition-shadow duration-200 ease-in-out">
+            <h3 className="font-semibold text-lg sm:text-md text-gray-700 mb-1">
+              Key Information
+            </h3>
+            <p className="text-gray-600 text-sm">
+              Assigned To: {ticket.assignedName}
+            </p>
+            <p className="text-gray-600 text-sm">Status</p>
+            <p className="text-black">
+              <select
+                defaultValue={ticket.status == null ? "" : ticket.status}
+                onChange={(e) => setStatus(e.target.value)}
+              >
+                {statuses.map((stat) => (
+                  <option key={stat.id}>{stat.status}</option>
+                ))}
+              </select>
+            </p>
+            <p className="text-gray-600 text-sm">
+              Created Date: <Date dateString={ticket.createdDate} />
+            </p>
+          </div>
 
-        {/* Ticket Information Card */}
-        <div className="bg-white p-4 shadow-md hover:shadow-lg transition-shadow duration-200 ease-in-out">
-          <h3 className="font-semibold text-lg sm:text-md text-gray-700 mb-1">Ticket Information</h3>
-          <p className="text-gray-600 text-sm">Category: Accommodation</p>
-          <p className="text-gray-600 text-sm">Issue Type: Problem</p>
-        
-        </div>
+          {/* Ticket Information Card */}
+          <div className="bg-white p-4 shadow-md hover:shadow-lg transition-shadow duration-200 ease-in-out">
+            <h3 className="font-semibold text-lg sm:text-md text-gray-700 mb-1">
+              Ticket Information
+            </h3>
+            <p className="text-gray-600 text-sm">Category</p>
+            <p className="text-black">
+              <select
+                defaultValue={ticket.category == null ? "" : ticket.category}
+                onChange={(e) => setCategory(e.target.value)}
+              >
+                {categories.map((cat) => (
+                  <option key={cat.id}>{cat.category}</option>
+                ))}
+              </select>
+            </p>
+            <p className="text-gray-600 text-sm">Issue Type</p>
+            <p className="text-black">
+              <select
+                defaultValue={ticket.type == null ? "" : ticket.type}
+                onChange={(e) => setType(e.target.value)}
+              >
+                {issues.map((type) => (
+                  <option key={type.id}>{type.issue}</option>
+                ))}
+              </select>
+            </p>
+          </div>
+          {/* Update Information Button */}
+          <button
+            type="submit"
+            className="px-4 py-1 bg-blue-500 text-white rounded w-full"
+          >
+            Update Information
+          </button>
+          {successMessage && (
+            <div className="mb-4 text-green-600 p-2 border border-green-600 bg-green-100 rounded">
+              {successMessage}
+            </div>
+          )}
+          {errorMessage && (
+            <div className="mb-4 text-red-600 p-2 border border-red-600 bg-red-100 rounded">
+              {errorMessage}
+            </div>
+          )}
+        </form>
       </div>
     </div>
   );
