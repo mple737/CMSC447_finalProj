@@ -5,7 +5,7 @@ import { FaTicketAlt, FaChartPie, FaBook, FaCog, FaPlus } from 'react-icons/fa';
 
 const Sidebar = () => {
   return (
-    <div className="bg-gray-800 text-white w-60 h-screen p-4 flex flex-col space-y-4">
+    <div className="bg-gray-800 text-white w-60 h-auto min-h-screen p-4 flex flex-col space-y-4">
       <h1 className="text-2xl font-bold mb-8">Supportlify</h1>
       <nav className="space-y-4">
 

@@ -43,18 +43,27 @@ export default async function Page({ params }: { params: Ticket }) {
       Authorization: `Bearer ${await getToken()}`,
       "Content-Type": "application/json",
     },
+    cache: 'force-cache'
   }).then((res) => res.json());
 
-  console.log(ticket.userId)
-
- const user = await fetch(`http://localhost:3500/users/${ticket.userId}`, {
+ const user = await fetch(`http://localhost:3500/users/${ticket.userId}/`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${await getToken()}`,
       "Content-Type": "application/json",
     },
+    cache: 'force-cache'
   }).then((res) => res.json());
 
+  const admins = await fetch(`http://localhost:3500/users/${ticket.userId}/${orgId}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${await getToken()}`,
+      "Content-Type": "application/json",
+    },
+    cache: 'force-cache'
+  }).then(async (res) => await res.json());
+  admins.data.filter((e:any) => e.role.includes("org:admin"))
   return (
     <div>
       <div className="flex h-screen bg-gray-200">
@@ -63,7 +72,7 @@ export default async function Page({ params }: { params: Ticket }) {
           <Header />
 
           <div className="flex flex-1">
-            <TicketProperties ticket={ticket} user={user} />
+            <TicketProperties ticket={ticket} user={user} admin={admins} />
             <TicketPage props={ticket} />
           </div>
         </div>

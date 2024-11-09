@@ -68,7 +68,7 @@ const createNewTicket = asyncHandler(async(req, res) => {
 const updateTicket = asyncHandler(async(req, res) => {
     const { organizationId }  = req.params
 
-    const { id, title, body, contactId, type, category, status, assignedToId } = req.body
+    const { id, title, body, contactId, type, category, status, assignedToName } = req.body
     
     const existingTicket = await prisma.ticket.findUnique({
         where: {
@@ -82,10 +82,7 @@ const updateTicket = asyncHandler(async(req, res) => {
     }
     
     const userName = await clerkClient.users.getUser(existingTicket.userId).fullName
-    const assignedToName = null
-    if(assignedToId) {
-        assignedToName = await clerkClient.users.getUser(assignedToId).fullName
-    }
+
 
     const ticket = await prisma.ticket.update({
         where: {
@@ -99,7 +96,6 @@ const updateTicket = asyncHandler(async(req, res) => {
             type,
             category,
             status,
-            assignedToId,
             assignedToName
         }
     })

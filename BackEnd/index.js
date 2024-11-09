@@ -51,10 +51,17 @@ app.use('/tickets/:ticketId/notes', requireAuth(), require('./routes/noteRoutes'
 
 app.get('/users/:userId', requireAuth(), async(req, res) => {
 
-    const {userId} = req.params
+    const { userId } = req.params
 
     const user = await clerkClient.users.getUser(userId)
     res.json(user)
+})
+
+app.get('/users/:userId/:organizationId', requireAuth(), async(req, res) => {
+   
+    const {userId, organizationId} = req.params
+    const users = await clerkClient.organizations.getOrganizationMembershipList({organizationId, orderBy: userId})
+    res.json(users)
 })
 
 // 404 Handling

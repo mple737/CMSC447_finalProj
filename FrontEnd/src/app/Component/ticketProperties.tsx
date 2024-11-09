@@ -6,10 +6,13 @@ import Date from "@/app/Component/Date";
 import { useUser, useOrganization, useAuth } from "@clerk/nextjs";
 import { getEnabledCategories } from "trace_events";
 import { Catamaran } from "next/font/google";
+import internal from "stream";
 
-const TicketProperties: React.FC<{ ticket: any; user: any }> = ({
+
+const TicketProperties: React.FC<{ ticket: any; user: any; admin: any}> = ({
   ticket,
   user,
+  admin,
 }) => {
   const [type, setType] = useState<string>(ticket.type);
   const [status, setStatus] = useState(ticket.status);
@@ -32,7 +35,8 @@ const TicketProperties: React.FC<{ ticket: any; user: any }> = ({
     { id: 1, status: "Closed" },
     { id: 2, status: "Pending" },
   ]);
-  const [assignment, setAssignment] = useState<string>("");
+
+  const [assignedToName, setAssignment] = useState<string>(ticket.assignedToName);
   const [successMessage, setSuccessMessage] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
 
@@ -50,7 +54,7 @@ const TicketProperties: React.FC<{ ticket: any; user: any }> = ({
       type,
       status,
       category,
-      assignment,
+      assignedToName,
     };
 
     await fetch(`http://localhost:3500/tickets/${organization?.id}`, {
@@ -62,13 +66,13 @@ const TicketProperties: React.FC<{ ticket: any; user: any }> = ({
       body: JSON.stringify(ticketData),
     });
 
-    console.log("Ticket Created:", JSON.stringify(ticketData));
+    console.log("Ticket Updated!:", JSON.stringify(ticketData));
     setSuccessMessage("Ticket updated successfully!");
     setErrorMessage("");
     setType(ticket.type);
     setStatus(ticket.status);
     setCategory(ticket.category);
-    setAssignment(ticket.assignedToName);
+    setAssignment(ticket.assignedToId);
 
     // Set a timeout to clear the success message after 5 seconds
     setTimeout(() => {
@@ -105,8 +109,21 @@ const TicketProperties: React.FC<{ ticket: any; user: any }> = ({
             <h3 className="font-semibold text-lg sm:text-md text-gray-700 mb-1">
               Key Information
             </h3>
-            <p className="text-gray-600 text-sm">
-              Assigned To: {ticket.assignedName}
+            <p className="text-gray-600 text-sm">Assigned To</p>
+            <p className="text-black">
+              <select
+                defaultValue={
+                  ticket.assignedToName == null ? "" : ticket.assignedToName
+                }
+                onChange={(e) => setAssignment(e.target.value)}
+              >
+                <option>
+
+                </option>
+                {admin.data.map((ad:any) => (
+                  <option key={ad.publicUserData.userId}>{ad.publicUserData.firstName} {ad.publicUserData.lastName}</option>
+                ))}
+              </select>
             </p>
             <p className="text-gray-600 text-sm">Status</p>
             <p className="text-black">
@@ -119,8 +136,9 @@ const TicketProperties: React.FC<{ ticket: any; user: any }> = ({
                 ))}
               </select>
             </p>
-            <p className="text-gray-600 text-sm">
-              Created Date: <Date dateString={ticket.createdDate} />
+            <p className="flex flex-col text-gray-600 text-sm">
+              Created Date
+              <Date dateString={ticket.createdDate} />
             </p>
           </div>
 
