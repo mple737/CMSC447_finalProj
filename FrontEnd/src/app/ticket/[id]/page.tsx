@@ -63,7 +63,7 @@ export default async function Page({ params }: { params: Ticket }) {
     },
     cache: 'force-cache'
   }).then(async (res) => await res.json());
-  admins.data.filter((e:any) => e.role.includes("org:admin"))
+  const allAdmins = admins.data.filter((e:any) => e.role.includes("org:admin"))
   return (
     <div>
       <div className="flex h-screen bg-gray-200">
@@ -72,7 +72,7 @@ export default async function Page({ params }: { params: Ticket }) {
           <Header />
 
           <div className="flex flex-1">
-            <TicketProperties ticket={ticket} user={user} admin={admins} />
+            <TicketProperties ticket={ticket} user={user} admin={allAdmins} />
             <TicketPage props={ticket} />
           </div>
         </div>

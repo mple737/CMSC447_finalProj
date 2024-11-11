@@ -11,12 +11,17 @@ import Link from "next/link";
 import { FaSpinner } from "react-icons/fa";
 
 import { Ticket, Note } from "@/app/ticket/[id]/page";
-import '@fortawesome/fontawesome-svg-core/styles.css'
+import "@fortawesome/fontawesome-svg-core/styles.css";
+import { render } from "react-dom";
 
-const TicketConversation = (ticket: any) => {
+const TicketConversation = ({query}:any) => {
   const { getToken, orgId, userId } = useAuth();
 
   const [tickets, setTickets] = useState<Ticket[]>([]);
+
+  const [activeTickets, setActiveTickets] = useState<Ticket[]>([])
+
+  const [role, setRole] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   useEffect(() => {
     async function fetchTickets() {
@@ -28,26 +33,66 @@ const TicketConversation = (ticket: any) => {
         },
       }).then((res) => res.json());
       setTickets(ticket);
+    }
+    async function fetchRole() {
+      const role = await fetch(
+        `http://localhost:3500/users/${userId}/${orgId}/role`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${await getToken()}`,
+            "Content-Type": "application/json",
+          },
+        }
+      ).then((res) => res.json());
+      setRole(role);
       setLoading(false);
     }
+    fetchRole()
     fetchTickets();
   }, []);
+  useEffect(() => {
+    if (role == "org:admin") {
+      if(query != '') {
+        setActiveTickets(tickets.filter(
+          (ticket) =>
+            (ticket.status == "Open" || ticket.status == "Pending") && (ticket.title.includes(query)
+        )))
+      } else {
+        setActiveTickets(tickets.filter(
+          (ticket) =>
+            (ticket.status == "Open" || ticket.status == "Pending")
+        ))
+      }
+    } else {
+      if(query != '') {
+      setActiveTickets(tickets.filter(
+        (ticket) =>
+          (ticket.status == "Open" || ticket.status == "Pending") &&
+          ticket.userId == userId  && (ticket.title.includes(query)
+      )))
+    } else {
+      setActiveTickets(tickets.filter(
+        (ticket) =>
+          (ticket.status == "Open" || ticket.status == "Pending") &&
+          ticket.userId == userId
+      ))
+    }
+    }
+  }, [loading, query])
+
 
   if (loading) {
     return (
       <div className="flex flex-1 flex-col md:flex-row md:space-x-8 p-4 md:p-8 overflow-y-auto hide-scrollbar">
         <div className="flex-1 bg-white p-6 rounded-lg shadow-lg overflow-y-auto hide-scrollbar">
-        <h1 className="text-2xl md:text-3xl font-bold mb-4 text-gray-800 ">
-          Tickets
-          
-        </h1>
-        <div className="h-fit flex items-center justify-center text-2xl md:text-3xl">
-        <FaSpinner className="fa-spin font-bold text-gray-800"/>
+          <h1 className="text-2xl md:text-3xl font-bold mb-4 text-gray-800 ">
+            Tickets
+          </h1>
+          <div className="h-fit flex items-center justify-center text-2xl md:text-3xl">
+            <FaSpinner className="fa-spin font-bold text-gray-800" />
+          </div>
         </div>
-
-
-        </div>
-
       </div>
     );
   }
@@ -60,7 +105,7 @@ const TicketConversation = (ticket: any) => {
         </h1>
 
         <ul>
-          {tickets.map((tic: any) => (
+          {activeTickets.map((tic: any) => (
             <li key={tic.id}>
               <div className="flex-1 p-4 space-y-6">
                 <Link href={"/ticket/" + tic.id}>

@@ -68,7 +68,7 @@ const createNewTicket = asyncHandler(async(req, res) => {
 const updateTicket = asyncHandler(async(req, res) => {
     const { organizationId }  = req.params
 
-    const { id, title, body, contactId, type, category, status, assignedToName } = req.body
+    const { id, title, body, contactId, type, category, status, assignedToName, assignedToId } = req.body
     
     const existingTicket = await prisma.ticket.findUnique({
         where: {
@@ -96,7 +96,8 @@ const updateTicket = asyncHandler(async(req, res) => {
             type,
             category,
             status,
-            assignedToName
+            assignedToName,
+            assignedToId
         }
     })
 

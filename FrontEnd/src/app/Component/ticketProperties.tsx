@@ -8,8 +8,7 @@ import { getEnabledCategories } from "trace_events";
 import { Catamaran } from "next/font/google";
 import internal from "stream";
 
-
-const TicketProperties: React.FC<{ ticket: any; user: any; admin: any}> = ({
+const TicketProperties: React.FC<{ ticket: any; user: any; admin: any }> = ({
   ticket,
   user,
   admin,
@@ -36,7 +35,12 @@ const TicketProperties: React.FC<{ ticket: any; user: any; admin: any}> = ({
     { id: 2, status: "Pending" },
   ]);
 
-  const [assignedToName, setAssignment] = useState<string>(ticket.assignedToName);
+  const [assignedToName, setAssignment] = useState<string | null>(
+    ticket.assignedToName
+  );
+  const [assignedToId, setAssignmentId] = useState<string | null>(
+    ticket.assignedToId
+  );
   const [successMessage, setSuccessMessage] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
 
@@ -52,10 +56,13 @@ const TicketProperties: React.FC<{ ticket: any; user: any; admin: any}> = ({
       id: ticket.id,
       organizationId: ticket.organizationId,
       type,
-      status,
       category,
-      assignedToName,
+      status,
+      assignedToId,
+      assignedToName
     };
+
+    console.log(assignedToId)
 
     await fetch(`http://localhost:3500/tickets/${organization?.id}`, {
       method: "PATCH",
@@ -72,14 +79,14 @@ const TicketProperties: React.FC<{ ticket: any; user: any; admin: any}> = ({
     setType(ticket.type);
     setStatus(ticket.status);
     setCategory(ticket.category);
-    setAssignment(ticket.assignedToId);
+    setAssignment(ticket.assignedToName);
+    setAssignmentId(ticket.assignedToId);
 
     // Set a timeout to clear the success message after 5 seconds
     setTimeout(() => {
       setSuccessMessage("");
     }, 2000);
   };
-
   return (
     <div className="w-full sm:w-1/4 md:w-1/5 min-w-[250px] max-h-screen p-4 bg-gray-50 overflow-y-auto shadow-lg">
       <h2 className="text-2xl sm:text-xl font-semibold mb-4 text-gray-800">
@@ -112,16 +119,20 @@ const TicketProperties: React.FC<{ ticket: any; user: any; admin: any}> = ({
             <p className="text-gray-600 text-sm">Assigned To</p>
             <p className="text-black">
               <select
-                defaultValue={
-                  ticket.assignedToName == null ? "" : ticket.assignedToName
-                }
-                onChange={(e) => setAssignment(e.target.value)}
+                defaultValue={ticket.assignedToName}
+                onChange={(e) => {
+                  setAssignmentId(e.target.options[e.target.selectedIndex].getAttribute('data-userid'));
+                  setAssignment(e.target.value);
+                }}
               >
-                <option>
-
-                </option>
-                {admin.data.map((ad:any) => (
-                  <option key={ad.publicUserData.userId}>{ad.publicUserData.firstName} {ad.publicUserData.lastName}</option>
+                <option value=""></option>
+                {admin.map((ad: any) => (
+                  <option
+                    key={ad.publicUserData.userId}
+                    data-userid={ad.publicUserData.userId}
+                  >
+                    {ad.publicUserData.firstName} {ad.publicUserData.lastName}
+                  </option>
                 ))}
               </select>
             </p>

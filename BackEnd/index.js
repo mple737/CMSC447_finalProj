@@ -64,6 +64,17 @@ app.get('/users/:userId/:organizationId', requireAuth(), async(req, res) => {
     res.json(users)
 })
 
+app.get('/users/:userId/:organizationId/role', requireAuth(), async(req, res) => {
+   
+    const {userId, organizationId} = req.params
+    const users = await clerkClient.organizations.getOrganizationMembershipList({organizationId, orderBy: userId})
+
+    const role = users.data[0].role
+
+    res.json(role)
+})
+
+
 // 404 Handling
 app.all('*', (req, res) => {
     res.status(404)
