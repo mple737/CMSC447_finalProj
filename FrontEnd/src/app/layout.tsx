@@ -1,15 +1,11 @@
-// RootLayout.tsx
-
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider, SignedIn, SignedOut } from "@clerk/nextjs";
 import LandingPage from "./landing/landingPage";
-
-import { ThemeProvider } from "next-themes";
-
 import Footer from "./landing/home/footer";
 import Providers from "@/app/Component/Providers";
+import { ThemeProvider } from "next-themes";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,35 +16,28 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
-
+}) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en">
       <body className={`${inter.className}`}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <ClerkProvider dynamic>
+        <Providers>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <div className="flex flex-col min-h-screen">
               <SignedOut>
-                <LandingPage />{" "}
-                {/* Display landing page if user is not signed in */}
+                <LandingPage />
                 <Footer />
               </SignedOut>
 
               <SignedIn>
                 <main className="flex-grow">
-                  {children} {/* Renders the current route's page content */}
+                  {children}
                 </main>
               </SignedIn>
             </div>
-          </ClerkProvider>
-        </ThemeProvider>
+          </ThemeProvider>
+        </Providers>
       </body>
     </html>
   );
