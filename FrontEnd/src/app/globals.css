@@ -14,12 +14,21 @@
   }
 }
 
-body {
+body, html {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+  height: 100%; 
 }
 
+/* Hide scrollbar but allow scrolling */
+body {
+  overflow: scroll; /* Ensure scrolling works */
+  -ms-overflow-style: none; /* Hide scrollbar in Internet Explorer */
+  scrollbar-width: none; /* Hide scrollbar in Firefox */
+}
 @layer utilities {
   .text-balance {
     text-wrap: balance;

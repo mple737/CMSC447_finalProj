@@ -9,17 +9,21 @@ export default function OrganizationSelection() {
 
   return (
     <section>
-      <h1>Welcome to the Organization Selection page.</h1>
-      <p>
-        This part of the application requires the user to select an organization in order to
-        proceed. If you are not part of an organization, you can accept an invitation or create your
-        own organization.
-      </p>
-      <OrganizationList
-        hidePersonal={true}
-        afterCreateOrganizationUrl={redirectUrl}
-        afterSelectOrganizationUrl={redirectUrl}
-      />
+      <div className="flex flex-col items-center space-y-6 text-2xl font-bold dark:bg-gray-900 bg-gray-100 h-screen">
+        <h1>Welcome to the Supportlify Dashboard</h1>
+        <p className="text-center font-normal text-lg">
+          You must belong to an organization to use this application.
+
+        </p>
+        <p className="text-center font-normal text-lg"> If you are not part of an organization, you can accept an invitation or create your
+          own organization.</p>
+        <OrganizationList
+          hidePersonal={true}
+          afterCreateOrganizationUrl={redirectUrl}
+          afterSelectOrganizationUrl={redirectUrl}
+        />
+      </div>
+
     </section>
   )
 }

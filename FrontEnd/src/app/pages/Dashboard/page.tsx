@@ -2,20 +2,20 @@
 'use client'
 import Sidebar from "../../Component/SideBar";
 import Header from "../../Component/header";
-import TicketConversation from "../../Component/TicketConversation";
+import TicketPage from "../../Component/TicketPages";
 import { useState } from "react";
 export default function Dashboard() {
 
   const [query, setQuery] = useState<string>("");
 
   return (
-    <div className="flex h-auto bg-gray-200">
+    <div className="flex h-auto dark:bg-gray-900 bg-gray-200">
       <Sidebar />
       <div className="flex-1 flex flex-col">
         <Header onQuery={setQuery}/>
 
         <div className="flex flex-1">
-          <TicketConversation query={query}/>
+          <TicketPage query={query}/>
         </div>
       </div>
     </div>

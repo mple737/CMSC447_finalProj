@@ -1,136 +1,136 @@
-// TicketConversation.js jsut testing
 "use client";
-import { useOrganization, useUser, useAuth } from "@clerk/nextjs";
-import { clerkClient } from "@clerk/nextjs/server";
-import { useState, useEffect } from "react";
-import useSWR from "swr";
-import Date from "./Date";
-import internal from "stream";
-import Link from "next/link";
 
-import { FaSpinner } from "react-icons/fa";
+import React, { useState } from "react";
+import { useUser } from "@clerk/nextjs"; // Assuming you're using Clerk for user management
 
-import { Ticket, Note } from "@/app/ticket/[id]/page";
-import "@fortawesome/fontawesome-svg-core/styles.css";
-import { render } from "react-dom";
+interface TicketPageProps {
+  props: {
+    ticketNumber: number;
+    title: string;
+    body: string;
+  };
+}
 
-const TicketConversation = ({query}:any) => {
-  const { getToken, orgId, userId } = useAuth();
+interface Message {
+  author: "user" | "admin";
+  text: string;
+  timestamp: string; // Adsd timestamp to each message
+}
 
-  const [tickets, setTickets] = useState<Ticket[]>([]);
+const TicketConversation: React.FC<TicketPageProps> = ({ props }) => {
+  const { ticketNumber, title, body } = props;
+  const { user } = useUser(); // Get the logged-in user data
 
-  const [activeTickets, setActiveTickets] = useState<Ticket[]>([])
+  const [isReplying, setIsReplying] = useState(false); // rrackiong whether the reply form is displayed
+  const [replyMessage, setReplyMessage] = useState(""); // store reply message
+  const [conversation, setConversation] = useState<Message[]>([
+    { author: "user", text: body, timestamp: new Date().toISOString() }, // Initial message from the user withthe  timestamps
+  ]);
 
-  const [role, setRole] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(true);
-  useEffect(() => {
-    async function fetchTickets() {
-      const ticket = await fetch(`http://localhost:3500/tickets/${orgId}`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${await getToken()}`,
-          "Content-Type": "application/json",
-        },
-      }).then((res) => res.json());
-      setTickets(ticket);
+  const handleSendReply = () => {
+    if (replyMessage.trim()) {
+
+      // admin reply to the conversation
+      setConversation((prev) => [
+        ...prev, // timestamp for the admin reply
+        { author: "admin", text: replyMessage, timestamp: new Date().toISOString() }, 
+      ]);
+      setReplyMessage(""); 
+      setIsReplying(false); 
     }
-    async function fetchRole() {
-      const role = await fetch(
-        `http://localhost:3500/users/${userId}/${orgId}/role`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${await getToken()}`,
-            "Content-Type": "application/json",
-          },
-        }
-      ).then((res) => res.json());
-      setRole(role);
-      setLoading(false);
-    }
-    fetchRole()
-    fetchTickets();
-  }, []);
-  useEffect(() => {
-    if (role == "org:admin") {
-      if(query != '') {
-        setActiveTickets(tickets.filter(
-          (ticket) =>
-            (ticket.status == "Open" || ticket.status == "Pending") && (ticket.title.includes(query)
-        )))
-      } else {
-        setActiveTickets(tickets.filter(
-          (ticket) =>
-            (ticket.status == "Open" || ticket.status == "Pending")
-        ))
-      }
-    } else {
-      if(query != '') {
-      setActiveTickets(tickets.filter(
-        (ticket) =>
-          (ticket.status == "Open" || ticket.status == "Pending") &&
-          ticket.userId == userId  && (ticket.title.includes(query)
-      )))
-    } else {
-      setActiveTickets(tickets.filter(
-        (ticket) =>
-          (ticket.status == "Open" || ticket.status == "Pending") &&
-          ticket.userId == userId
-      ))
-    }
-    }
-  }, [loading, query])
+  };
 
+  const handleCloseTicket = () => {
+    alert("This ticket will be closed.");
+  };
 
-  if (loading) {
-    return (
-      <div className="flex flex-1 flex-col md:flex-row md:space-x-8 p-4 md:p-8 overflow-y-auto hide-scrollbar">
-        <div className="flex-1 bg-white p-6 rounded-lg shadow-lg overflow-y-auto hide-scrollbar">
-          <h1 className="text-2xl md:text-3xl font-bold mb-4 text-gray-800 ">
-            Tickets
-          </h1>
-          <div className="h-fit flex items-center justify-center text-2xl md:text-3xl">
-            <FaSpinner className="fa-spin font-bold text-gray-800" />
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleString(); // Format to a readable date
+  };
+
+  return (
+
+    <div className="flex-1 w-full dark:bg-gray-900 p-4 space-y-6">
+      <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+        <h2 className="text-lg font-semibold dark:text-gray-100 text-gray-800">
+          #{ticketNumber} - {title}
+        </h2>
+
+      {/* Main Container with Fixed Height */}
+        <div className="mt-4 max-h-[70.5vh] flex flex-col justify-between">
+          
+          {/* Scrollable Conversation Thread */}
+          <div className="flex-1 overflow-y-auto hide-scrollbar space-y-4">
+            {conversation.map((message, index) => (
+              <div
+                key={index}
+                className={`p-4 rounded-lg shadow-sm ${
+                  message.author === "user"
+                    ? "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300"
+                    : "bg-blue-100 dark:bg-blue-700 text-blue-800 dark:text-blue-300"
+                }`}
+              >
+                <p className="font-semibold text-gray-800 dark:text-gray-300">
+                  {message.author === "user" ? user?.fullName || "User" : "Admin"}
+                </p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  Sent at: {formatDate(message.timestamp)}
+                </p>
+                <br />
+                <p>{message.text}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Reply Section */}
+          {!isReplying ? (
+            <div className="flex space-x-4 mt-6">
+              <button
+                className="px-4 py-2 bg-blue-700 hover:bg-blue-800 text-white rounded-lg transition duration-200"
+                onClick={() => setIsReplying(true)} // Show reply form
+              >
+                Reply
+              </button>
+              <button
+                className="px-4 py-2 bg-red-700 hover:bg-red-800 text-white rounded-lg transition duration-200"
+                onClick={handleCloseTicket}
+              >
+                Close Ticket
+              </button>
+            </div>
+
+            ) : (
+              <div className="mt-6">
+                <textarea
+                  className="w-full h-18 p-2 text-gray-800 border border-gray-300 rounded-lg dark:bg-gray-700 dark:text-gray-300"
+                  placeholder="Type your reply here..."
+                  value={replyMessage}
+                  onChange={(e) => setReplyMessage(e.target.value)}
+                />
+                <div className="flex space-x-4 mt-4">
+                  <button
+                    className="px-4 py-2 bg-gray-500 hover:bg-gray-700 dark:bg-gray-600 text-gray-100 rounded-lg transition duration-200"
+                    onClick={() => setIsReplying(false)} // Cancel reply
+                  >
+                    Cancel
+                  </button>
+                  
+
+                  <button
+                    className="px-4 py-2 bg-blue-600 hover:bg-blue-800 text-white rounded-lg transition duration-200"
+                    onClick={handleSendReply} // Simulating the reply submission
+                  >
+                    Send Reply
+                  </button>
+                </div>
+              </div>
+            )}
+            
           </div>
         </div>
       </div>
-    );
-  }
 
-  return (
-    <div className="flex flex-1 flex-col md:flex-row md:space-x-8 p-4 md:p-8 overflow-y-auto hide-scrollbar">
-      <div className="flex-1 bg-white p-6 rounded-lg shadow-lg overflow-y-auto hide-scrollbar">
-        <h1 className="text-2xl md:text-3xl font-bold mb-4 text-gray-800">
-          Tickets
-        </h1>
-
-        <ul>
-          {activeTickets.map((tic: any) => (
-            <li key={tic.id}>
-              <div className="flex-1 p-4 space-y-6">
-                <Link href={"/ticket/" + tic.id}>
-                  <div className="p-4 bg-gray-50 rounded-lg shadow-md hover:bg-gray-100">
-                    <h2 className="text-xl font-bold text-black">
-                      #{tic.ticketNumber} - {tic.title}
-                    </h2>
-                    <p className="text-sm text-gray-500">
-                      <Date dateString={tic.createdDate} />
-                    </p>
-                    <div className="mt-4 text-gray-500">
-                      <p>
-                        <strong> {tic.userName} </strong>
-                      </p>
-                      <p className="text-gray-700">{tic.body}</p>
-                    </div>
-                    <div className="flex space-x-4 mt-4"></div>
-                  </div>
-                </Link>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </div>
   );
 };
 

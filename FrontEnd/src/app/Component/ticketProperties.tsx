@@ -2,54 +2,70 @@
 
 import React, { useState } from "react";
 import Date from "@/app/Component/Date";
+import { redirect } from "next/navigation";
+import { useUser, useOrganization, useAuth, Protect } from "@clerk/nextjs";
+import ModalPopup from "@/app/Component/ModalPopUp";
+import { Inter } from "next/font/google";
 
-import { useUser, useOrganization, useAuth } from "@clerk/nextjs";
-import { getEnabledCategories } from "trace_events";
-import { Catamaran } from "next/font/google";
-import internal from "stream";
+const inter = Inter({ subsets: ["latin"] });
 
-const TicketProperties: React.FC<{ ticket: any; user: any; admin: any }> = ({
-  ticket,
-  user,
-  admin,
-}) => {
-  const [type, setType] = useState<string>(ticket.type);
-  const [status, setStatus] = useState(ticket.status);
-  const [category, setCategory] = useState(ticket.category);
-  const [categories, setCategories] = useState([
-    { id: 0, category: "" },
-    { id: 1, category: "Email" },
-    { id: 2, category: "Password" },
-    { id: 3, category: "Software" },
-    { id: 4, category: "Hardware" },
-  ]);
-  const [issues, setIssues] = useState([
-    { id: 0, issue: "" },
-    { id: 1, issue: "Question" },
-    { id: 2, issue: "Problem" },
-    { id: 3, issue: "Notification" },
-  ]);
-  const [statuses, setStatuses] = useState([
-    { id: 0, status: "Open" },
-    { id: 1, status: "Closed" },
-    { id: 2, status: "Pending" },
-  ]);
-
-  const [assignedToName, setAssignment] = useState<string | null>(
-    ticket.assignedToName
-  );
-  const [assignedToId, setAssignmentId] = useState<string | null>(
-    ticket.assignedToId
-  );
-  const [successMessage, setSuccessMessage] = useState<string>("");
-  const [errorMessage, setErrorMessage] = useState<string>("");
+const TicketProperties: React.FC<{ ticket: any; user: any; admin: any }> = ({ ticket, user, admin }) => {
+  const [type, setType] = useState(ticket.type || "");
+  const [status, setStatus] = useState(ticket.status || "");
+  const [category, setCategory] = useState(ticket.category || "");
+  const [assignedToName, setAssignment] = useState(ticket.assignedToName || "");
+  const [assignedToId, setAssignmentId] = useState(ticket.assignedToId || "");
+  
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+  const [modalType, setModalType] = useState<"success" | "error">("success");
 
   const { organization } = useOrganization();
   const { getToken } = useAuth();
 
-  const handleSubmit = async (
-    e: React.FormEvent<HTMLFormElement>
-  ): Promise<void> => {
+  const categories = [
+    { id: 1, category: "Email" },
+    { id: 2, category: "Password" },
+    { id: 3, category: "Software" },
+    { id: 4, category: "Hardware" },
+  ];
+
+  const issues = [
+    { id: 1, issue: "Question" },
+    { id: 2, issue: "Problem" },
+    { id: 3, issue: "Notification" },
+  ];
+
+  const statuses = [
+    { id: 1, status: "Open" },
+    { id: 2, status: "Closed" },
+    { id: 3, status: "Pending" },
+  ];
+
+  // Deleted Ticket Handler
+  const handleDelete = async () => {
+    const ticketData = { id: ticket.id, organizationId: ticket.organizationId };
+  
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tickets/${organization?.id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${await getToken()}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(ticketData),
+    });
+  
+    setModalMessage("Your ticket has been removed successfully!");
+    setModalType("success");
+    setShowDeleteModal(true);
+    setTimeout(() => redirect("/"), 3000);
+  };
+  
+
+  // Updated Ticket Handler
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const ticketData = {
@@ -62,9 +78,7 @@ const TicketProperties: React.FC<{ ticket: any; user: any; admin: any }> = ({
       assignedToName
     };
 
-    console.log(assignedToId)
-
-    await fetch(`http://localhost:3500/tickets/${organization?.id}`, {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tickets/${organization?.id}`, {
       method: "PATCH",
       headers: {
         Authorization: `Bearer ${await getToken()}`,
@@ -73,135 +87,213 @@ const TicketProperties: React.FC<{ ticket: any; user: any; admin: any }> = ({
       body: JSON.stringify(ticketData),
     });
 
-    console.log("Ticket Updated!:", JSON.stringify(ticketData));
-    setSuccessMessage("Ticket updated successfully!");
-    setErrorMessage("");
-    setType(ticket.type);
-    setStatus(ticket.status);
-    setCategory(ticket.category);
-    setAssignment(ticket.assignedToName);
-    setAssignmentId(ticket.assignedToId);
-
-    // Set a timeout to clear the success message after 5 seconds
+    setModalMessage("Your ticket has updated successfully!");
+    setModalType("success");
+    setShowSuccessModal(true);
+    
     setTimeout(() => {
-      setSuccessMessage("");
-    }, 2000);
+      setShowSuccessModal(false); 
+    }, 3000);  //Redirect to the previous page not neccessary
   };
-  return (
-    <div className="w-full sm:w-1/4 md:w-1/5 min-w-[250px] max-h-screen p-4 bg-gray-50 overflow-y-auto shadow-lg">
-      <h2 className="text-2xl sm:text-xl font-semibold mb-4 text-gray-800">
-        Ticket Properties
-      </h2>
 
-      <div className="grid grid-cols-1 gap-4">
-        <form onSubmit={handleSubmit} className="space-y-4">
+  return (
+    <Protect role="org:admin">
+     
+<div className="bg-white w-full sm:w-1/4 md:w-1/5 min-w-[250px] md:h-[88.4vh] lg:h-[91.10vh] p-3 bg-gray-500 dark:bg-gray-700 overflow-y-auto shadow-lg">
+
+        <h2 className="text-2xl sm:text-xl font-semibold mb-4 dark:text-gray-100 text-gray-800">
+          
+          Ticket Properties
+        </h2>
+
+        <div className="max-h-[76vh] overflow-y-auto hide-scrollbar grid grid-cols-1 gap-4">
+
           {/* Contact Info Card */}
-          <div className="bg-white p-4 shadow-md hover:shadow-lg transition-shadow duration-200 ease-in-out">
-            <h3 className="font-semibold text-lg sm:text-md text-gray-700 mb-1">
+          <div className="bg-gray-100 dark:bg-gray-600 p-4 shadow-md hover:shadow-lg transition-shadow duration-200 ease-in-out rounded-lg">
+            
+            <h3 className="font-semibold text-lg sm:text-md text-gray-800 dark:text-gray-300 mb-1">
               Contact Info
             </h3>
-            <p className="text-gray-600 text-sm">
-              {user.firstName} {user.lastName}
+            
+            <p className="text-gray-800 dark:text-gray-300 text-sm">
+              Name: {user.firstName} {user.lastName}
             </p>
-            <p className="text-gray-600 text-sm">
-              {user.emailAddresses[0].emailAddress}
+            
+            <p className="text-gray-800 dark:text-gray-300 text-sm">
+              Email: {user.emailAddresses[0].emailAddress}
             </p>
-            <p className="text-gray-600 text-sm">
-              {user.phoneNumbers[0].phoneNumber}
+           
+            <p className="text-gray-800 dark:text-gray-300 text-sm">
+              Phone: {user.phoneNumbers[0].phoneNumber}
+           
             </p>
           </div>
 
           {/* Key Information Card */}
-          <div className="bg-white p-4 shadow-md hover:shadow-lg transition-shadow duration-200 ease-in-out">
-            <h3 className="font-semibold text-lg sm:text-md text-gray-700 mb-1">
+          <div className="bg-gray-100 dark:bg-gray-600 p-4 shadow-md hover:shadow-lg transition-shadow duration-200 ease-in-out rounded-lg">
+            <h3 className="font-semibold text-lg sm:text-md text-gray-800 dark:text-gray-300 mb-1">
+            
               Key Information
+            
             </h3>
-            <p className="text-gray-600 text-sm">Assigned To</p>
-            <p className="text-black">
+
+            {/* Assigned To Row */}
+            <div className="flex items-center space-x-4 mb-4">
+              <label className="text-gray-800 dark:text-gray-300 text-sm">Assigned To: </label>
               <select
-                defaultValue={ticket.assignedToName}
+               
+               defaultValue={assignedToName}
                 onChange={(e) => {
-                  setAssignmentId(e.target.options[e.target.selectedIndex].getAttribute('data-userid'));
+                  setAssignmentId(e.target.options[e.target.selectedIndex].getAttribute("data-userid"));
                   setAssignment(e.target.value);
                 }}
+                className="bg-gray-100 border border-gray-300 text-gray-800 dark:bg-gray-700 text-sm dark:text-white dark:border-gray-600 rounded-md font-inter flex-1"
               >
-                <option value=""></option>
+               
+                <option value=" "></option>
+               
                 {admin.map((ad: any) => (
-                  <option
-                    key={ad.publicUserData.userId}
-                    data-userid={ad.publicUserData.userId}
-                  >
+                  <option key={ad.publicUserData.userId} data-userid = {ad.publicUserData.userId}>
                     {ad.publicUserData.firstName} {ad.publicUserData.lastName}
+                 
                   </option>
-                ))}
+               
+               ))}
               </select>
-            </p>
-            <p className="text-gray-600 text-sm">Status</p>
-            <p className="text-black">
+            </div>
+
+            {/* Status Row */}
+            <div className="flex items-center space-x-4 mb-4">
+              
+              <label className="text-gray-800 dark:text-gray-300 text-sm">Status:</label>
+              
               <select
-                defaultValue={ticket.status == null ? "" : ticket.status}
+                defaultValue={status}
                 onChange={(e) => setStatus(e.target.value)}
+                className="bg-gray-100 border border-gray-300 text-gray-800 dark:bg-gray-700 text-sm dark:text-white dark:border-gray-600 rounded-md font-inter flex-1"
               >
                 {statuses.map((stat) => (
-                  <option key={stat.id}>{stat.status}</option>
-                ))}
+               
+                 <option key={stat.id} value={stat.status}>{stat.status}</option>
+               
+               ))}
               </select>
-            </p>
-            <p className="flex flex-col text-gray-600 text-sm">
-              Created Date
-              <Date dateString={ticket.createdDate} />
-            </p>
+            </div>
+
+            <p className="flex flex-col text-gray-800 dark:text-gray-300 text-sm">
+            Created On:
+            
+            <Date dateString={ticket.createdDate} />
+            
+          </p>
+
+           
           </div>
 
           {/* Ticket Information Card */}
-          <div className="bg-white p-4 shadow-md hover:shadow-lg transition-shadow duration-200 ease-in-out">
-            <h3 className="font-semibold text-lg sm:text-md text-gray-700 mb-1">
-              Ticket Information
-            </h3>
-            <p className="text-gray-600 text-sm">Category</p>
-            <p className="text-black">
+          <div className="bg-gray-100 dark:bg-gray-600 p-4 shadow-md hover:shadow-lg transition-shadow duration-200 ease-in-out rounded-lg">
+            <h3 className="font-semibold text-lg sm:text-md text-gray-800 dark:text-gray-300 mb-4">Ticket Information</h3>
+
+            {/* Categorya Row */}
+            <div className="flex items-center space-x-4 mb-4">
+            
+              <label className="text-gray-800 dark:text-gray-300 text-sm">Category:</label>
+             
               <select
-                defaultValue={ticket.category == null ? "" : ticket.category}
+                defaultValue={category}
                 onChange={(e) => setCategory(e.target.value)}
+                className="bg-gray-100 border border-gray-300 text-gray-800 dark:bg-gray-700 text-sm dark:text-white dark:border-gray-600 rounded-md font-inter flex-1"
               >
                 {categories.map((cat) => (
-                  <option key={cat.id}>{cat.category}</option>
+                  <option key={cat.id} value={cat.category}>{cat.category}</option>
                 ))}
               </select>
-            </p>
-            <p className="text-gray-600 text-sm">Issue Type</p>
-            <p className="text-black">
+            </div>
+
+            {/* Issue Type Row */}
+            <div className="flex items-center space-x-4 mb-4">
+             
+              <label className="text-gray-800 dark:text-gray-300 text-sm">Issue Type:</label>
+             
               <select
-                defaultValue={ticket.type == null ? "" : ticket.type}
+                defaultValue={type}
                 onChange={(e) => setType(e.target.value)}
+                className="bg-gray-100 border border-gray-300 text-gray-800 dark:text-white text-sm dark:bg-gray-700 dark:border-gray-600 rounded-md font-inter flex-1"
               >
-                {issues.map((type) => (
-                  <option key={type.id}>{type.issue}</option>
+                {issues.map((issue) => (
+                  <option key={issue.id} value={issue.issue}>{issue.issue}</option>
                 ))}
+             
               </select>
-            </p>
+           
+            </div>
           </div>
-          {/* Update Information Button */}
-          <button
-            type="submit"
-            className="px-4 py-1 bg-blue-500 text-white rounded w-full"
-          >
-            Update Information
-          </button>
-          {successMessage && (
-            <div className="mb-4 text-green-600 p-2 border border-green-600 bg-green-100 rounded">
-              {successMessage}
-            </div>
-          )}
-          {errorMessage && (
-            <div className="mb-4 text-red-600 p-2 border border-red-600 bg-red-100 rounded">
-              {errorMessage}
-            </div>
-          )}
-        </form>
+
+            {/* Update Information Button */}
+            <form onSubmit={handleSubmit} className="mb-0"> {/* Adds margin below this form */}
+              <button type="submit" className="px-3 py-2 bg-blue-700 hover:bg-blue-800  text-white rounded w-full sm:w-3/4 lg:w-full">
+                Update Information
+              </button>
+            </form>
+
+            <button
+              type="button"
+              className="px-3 py-2 bg-red-700 hover:bg-red-800 text-white rounded w-full sm:w-3/4 lg:w-full"
+              onClick={() => setShowDeleteModal(true)} // Show the confirmation modal
+            >
+              Delete Ticket
+            </button>
+
+
+
+
+          </div>
+
+
+        {/* Modal Popups for scuessfully updated */}
+        {showSuccessModal && (
+          <ModalPopup
+           
+            open={showSuccessModal}
+            title="Success"
+            message={modalMessage}
+            type="success"
+           
+            onClose={() => setShowSuccessModal(false)}
+          />
+        )}
+
+
+        {showDeleteModal && (
+          <ModalPopup
+            open={showDeleteModal}
+            title="Confirm Delete"
+            message="Are you sure you want to delete this ticket?"
+            type="error"
+            onClose={() => setShowDeleteModal(false)}
+            onConfirm={handleDelete} // Proceed with delete
+          />
+        )}
+
+        
+        {showErrorModal && (
+          
+          <ModalPopup
+            
+            open={showErrorModal}
+            title="Error"
+            message={modalMessage}
+            type="error"
+           
+            onClose={() => setShowErrorModal(false)}
+          />
+        )}
       </div>
-    </div>
+      
+    </Protect>
   );
 };
 
 export default TicketProperties;
+
+

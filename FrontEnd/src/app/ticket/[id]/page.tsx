@@ -1,11 +1,13 @@
 import { auth } from "@clerk/nextjs/server";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { TicketPage } from "@/app/Component/TicketPage";
+import TicketConversation from "@/app/Component/TicketConversation";  // Import TicketConversation
 import TicketProperties from "@/app/Component/ticketProperties";
 import Sidebar from "../../Component/SideBar";
 import Header from "../../Component/header";
-export const dynamicParams = true;
 import React from "react";
+
+export const dynamicParams = true;
+
 export type Ticket = {
   id: string;
   createdDate: string;
@@ -43,16 +45,16 @@ export default async function Page({ params }: { params: Ticket }) {
       Authorization: `Bearer ${await getToken()}`,
       "Content-Type": "application/json",
     },
-    cache: 'force-cache'
+    cache: 'no-cache'
   }).then((res) => res.json());
 
- const user = await fetch(`http://localhost:3500/users/${ticket.userId}/`, {
+  const user = await fetch(`http://localhost:3500/users/${ticket.userId}/`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${await getToken()}`,
       "Content-Type": "application/json",
     },
-    cache: 'force-cache'
+    cache: 'no-cache'
   }).then((res) => res.json());
 
   const admins = await fetch(`http://localhost:3500/users/${ticket.userId}/${orgId}`, {
@@ -61,9 +63,11 @@ export default async function Page({ params }: { params: Ticket }) {
       Authorization: `Bearer ${await getToken()}`,
       "Content-Type": "application/json",
     },
-    cache: 'force-cache'
+    cache: 'no-cache'
   }).then(async (res) => await res.json());
-  const allAdmins = admins.data.filter((e:any) => e.role.includes("org:admin"))
+
+  const allAdmins = admins.data.filter((e: any) => e.role.includes("org:admin"));
+
   return (
     <div>
       <div className="flex h-screen bg-gray-200">
@@ -72,8 +76,9 @@ export default async function Page({ params }: { params: Ticket }) {
           <Header />
 
           <div className="flex flex-1">
+            {/* Replace TicketPages with TicketConversation */}
             <TicketProperties ticket={ticket} user={user} admin={allAdmins} />
-            <TicketPage props={ticket} />
+            <TicketConversation props={ticket} /> 
           </div>
         </div>
       </div>

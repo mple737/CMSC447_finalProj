@@ -11,6 +11,8 @@ const CreateTicket: React.FC = () => {
   const [successMessage, setSuccessMessage] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState<string>('');
 
+  const [query, setQuery] = useState<string>('')
+
   const { user } = useUser()
   const { organization } = useOrganization()
   const { getToken } = useAuth()
@@ -25,7 +27,7 @@ const CreateTicket: React.FC = () => {
       userId: user?.id
     };
 
-    await fetch(`http://localhost:3500/tickets/${organization?.id}`, {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tickets/${organization?.id}`, {
       method:'POST',
       headers:{
         Authorization: `Bearer ${await getToken()}`,
@@ -47,7 +49,7 @@ const CreateTicket: React.FC = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen dark:bg-gray-900 bg-gray-100">
       {/* Sidebar */}
       <div className="h-screen overflow-y-auto hide-scrollbar">
         <Sidebar />
@@ -55,11 +57,11 @@ const CreateTicket: React.FC = () => {
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
-        <Header />
+        <Header onQuery={setQuery} />
 
         <div className="flex flex-1 p-4 md:p-8 overflow-y-auto hide-scrollbar">
-          <div className="flex-1 max-w-8xl w-full bg-white p-8 rounded-lg shadow-lg mx-auto">
-            <h1 className="text-3xl font-bold mb-4 text-gray-800">Create Ticket</h1>
+          <div className="flex-1 max-w-8xl w-full dark:bg-gray-800 bg-white p-8 rounded-lg shadow-lg mx-auto">
+            <h1 className="text-3xl font-bold mb-4 dark:text-gray-100 text-gray-800">Create Ticket</h1>
             {successMessage && (
               <div className="mb-4 text-green-600 p-2 border border-green-600 bg-green-100 rounded">
                 {successMessage}
@@ -73,23 +75,23 @@ const CreateTicket: React.FC = () => {
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="flex space-x-4">
                 <div className="flex-1">
-                  <label className="block text-gray-700 font-semibold">Subject</label>
+                  <label className="block dark:text-gray-300 text-gray-700 font-semibold">Subject</label>
                   <input
                     type="text"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     required
-                    className="mt-1 block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-black"
+                    className="mt-1 block dark:bg-gray-700 w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 dark:text-white text-black"
                   />
                 </div>
               </div>
               <div>
-                <label className="block text-gray-700 font-semibold">Description</label>
+                <label className="block dark:text-gray-300 text-gray-700 font-semibold">Description</label>
                 <textarea
                   value={body}
                   onChange={(e) => setDescription(e.target.value)}
                   required
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-black"
+                  className="mt-1 block w-full dark:bg-gray-700 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 dark:text-white text-black"
                   rows={4}
                 />
               </div>
