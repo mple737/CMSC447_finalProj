@@ -24,7 +24,7 @@ export default function Header({onQuery}: any) {
         </select>*/}
         
         <div className="flex flex-col items-center text-gray-700 gap-2 sm:flex-row sm:gap-4">
-          <OrganizationSwitcher hidePersonal={true} appearance={{ baseTheme: resolvedTheme == "dark" ? dark : undefined }} />
+          <OrganizationSwitcher hidePersonal={true} appearance={{ baseTheme: resolvedTheme == "dark" ? dark : undefined }} afterSelectOrganizationUrl="/"/>
         </div>
 
         {/* Search Input */}

@@ -3,13 +3,12 @@
 import React, { useState } from "react";
 import Date from "@/app/Component/Date";
 import { redirect } from "next/navigation";
-import { useUser, useOrganization, useAuth, Protect } from "@clerk/nextjs";
+import { useOrganization, useAuth, Protect } from "@clerk/nextjs";
 import ModalPopup from "@/app/Component/ModalPopUp";
-import { Inter } from "next/font/google";
-
-const inter = Inter({ subsets: ["latin"] });
 
 const TicketProperties: React.FC<{ ticket: any; user: any; admin: any }> = ({ ticket, user, admin }) => {
+  
+  const { getToken } = useAuth();
   const [type, setType] = useState(ticket.type || "");
   const [status, setStatus] = useState(ticket.status || "");
   const [category, setCategory] = useState(ticket.category || "");
@@ -23,7 +22,7 @@ const TicketProperties: React.FC<{ ticket: any; user: any; admin: any }> = ({ ti
   const [modalType, setModalType] = useState<"success" | "error">("success");
 
   const { organization } = useOrganization();
-  const { getToken } = useAuth();
+  
 
   const categories = [
     { id: 1, category: "Email" },
@@ -77,7 +76,6 @@ const TicketProperties: React.FC<{ ticket: any; user: any; admin: any }> = ({ ti
       assignedToId,
       assignedToName
     };
-
     await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tickets/${organization?.id}`, {
       method: "PATCH",
       headers: {
@@ -99,7 +97,7 @@ const TicketProperties: React.FC<{ ticket: any; user: any; admin: any }> = ({ ti
   return (
     <Protect role="org:admin">
      
-<div className="bg-white w-full sm:w-1/4 md:w-1/5 min-w-[250px] md:h-[88.4vh] lg:h-[91.10vh] p-3 bg-gray-500 dark:bg-gray-700 overflow-y-auto shadow-lg">
+<div className="bg-white w-full sm:w-1/4 md:w-1/5 min-w-[250px] p-3 bg-gray-500 dark:bg-gray-700 overflow-y-auto shadow-lg h-full">
 
         <h2 className="text-2xl sm:text-xl font-semibold mb-4 dark:text-gray-100 text-gray-800">
           
@@ -116,15 +114,15 @@ const TicketProperties: React.FC<{ ticket: any; user: any; admin: any }> = ({ ti
             </h3>
             
             <p className="text-gray-800 dark:text-gray-300 text-sm">
-              Name: {user.firstName} {user.lastName}
+              Name: <b> {user.firstName} {user.lastName} </b>
             </p>
             
             <p className="text-gray-800 dark:text-gray-300 text-sm">
-              Email: {user.emailAddresses[0].emailAddress}
+              Email: <b> {user.emailAddresses[0].emailAddress} </b>
             </p>
            
             <p className="text-gray-800 dark:text-gray-300 text-sm">
-              Phone: {user.phoneNumbers[0].phoneNumber}
+              Phone: <b> {user.phoneNumbers[0].phoneNumber} </b>
            
             </p>
           </div>
@@ -138,8 +136,8 @@ const TicketProperties: React.FC<{ ticket: any; user: any; admin: any }> = ({ ti
             </h3>
 
             {/* Assigned To Row */}
-            <div className="flex items-center space-x-4 mb-4">
-              <label className="text-gray-800 dark:text-gray-300 text-sm">Assigned To: </label>
+            <div className="flex items-center space-x-2 mb-4">
+              <label className="text-gray-800 dark:text-gray-300 text-sm">Agent: </label>
               <select
                
                defaultValue={assignedToName}
@@ -147,7 +145,7 @@ const TicketProperties: React.FC<{ ticket: any; user: any; admin: any }> = ({ ti
                   setAssignmentId(e.target.options[e.target.selectedIndex].getAttribute("data-userid"));
                   setAssignment(e.target.value);
                 }}
-                className="bg-gray-100 border border-gray-300 text-gray-800 dark:bg-gray-700 text-sm dark:text-white dark:border-gray-600 rounded-md font-inter flex-1"
+                className="bg-gray-100 p-1 border border-gray-300 text-gray-800 dark:bg-gray-700 text-sm dark:text-white dark:border-gray-600 rounded-md font-inter flex-1"
               >
                
                 <option value=" "></option>
@@ -163,14 +161,14 @@ const TicketProperties: React.FC<{ ticket: any; user: any; admin: any }> = ({ ti
             </div>
 
             {/* Status Row */}
-            <div className="flex items-center space-x-4 mb-4">
+            <div className="flex items-center space-x-2 mb-4">
               
               <label className="text-gray-800 dark:text-gray-300 text-sm">Status:</label>
               
               <select
                 defaultValue={status}
                 onChange={(e) => setStatus(e.target.value)}
-                className="bg-gray-100 border border-gray-300 text-gray-800 dark:bg-gray-700 text-sm dark:text-white dark:border-gray-600 rounded-md font-inter flex-1"
+                className="bg-gray-100 border p-1 border-gray-300 text-gray-800 dark:bg-gray-700 text-sm dark:text-white dark:border-gray-600 rounded-md font-inter flex-1"
               >
                 {statuses.map((stat) => (
                
@@ -195,14 +193,14 @@ const TicketProperties: React.FC<{ ticket: any; user: any; admin: any }> = ({ ti
             <h3 className="font-semibold text-lg sm:text-md text-gray-800 dark:text-gray-300 mb-4">Ticket Information</h3>
 
             {/* Categorya Row */}
-            <div className="flex items-center space-x-4 mb-4">
+            <div className="flex items-center space-x-2 mb-4">
             
               <label className="text-gray-800 dark:text-gray-300 text-sm">Category:</label>
              
               <select
                 defaultValue={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="bg-gray-100 border border-gray-300 text-gray-800 dark:bg-gray-700 text-sm dark:text-white dark:border-gray-600 rounded-md font-inter flex-1"
+                className="bg-gray-100 p-1 border border-gray-300 text-gray-800 dark:bg-gray-700 text-sm dark:text-white dark:border-gray-600 rounded-md font-inter flex-1"
               >
                 {categories.map((cat) => (
                   <option key={cat.id} value={cat.category}>{cat.category}</option>
@@ -211,14 +209,14 @@ const TicketProperties: React.FC<{ ticket: any; user: any; admin: any }> = ({ ti
             </div>
 
             {/* Issue Type Row */}
-            <div className="flex items-center space-x-4 mb-4">
+            <div className="flex items-center space-x-2 mb-4">
              
               <label className="text-gray-800 dark:text-gray-300 text-sm">Issue Type:</label>
              
               <select
                 defaultValue={type}
                 onChange={(e) => setType(e.target.value)}
-                className="bg-gray-100 border border-gray-300 text-gray-800 dark:text-white text-sm dark:bg-gray-700 dark:border-gray-600 rounded-md font-inter flex-1"
+                className="bg-gray-100 p-1 border border-gray-300 text-gray-800 dark:text-white text-sm dark:bg-gray-700 dark:border-gray-600 rounded-md font-inter flex-1"
               >
                 {issues.map((issue) => (
                   <option key={issue.id} value={issue.issue}>{issue.issue}</option>
@@ -259,7 +257,7 @@ const TicketProperties: React.FC<{ ticket: any; user: any; admin: any }> = ({ ti
             message={modalMessage}
             type="success"
            
-            onClose={() => setShowSuccessModal(false)}
+            onOkay={() => setShowSuccessModal(false)}
           />
         )}
 

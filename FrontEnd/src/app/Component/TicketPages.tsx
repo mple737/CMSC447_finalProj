@@ -1,10 +1,7 @@
 "use client";
-import { useOrganization, useUser, useAuth } from "@clerk/nextjs";
-import { clerkClient } from "@clerk/nextjs/server";
+import { useAuth } from "@clerk/nextjs";
 import { useState, useEffect } from "react";
-import useSWR from "swr";
 import Date from "./Date";
-import internal from "stream";
 import Link from "next/link";
 
 import { FaCog } from "react-icons/fa";
@@ -13,15 +10,15 @@ import { Ticket, Note } from "@/app/ticket/[id]/page";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 
 
-const TicketConversation = ({ query }: any) => {
+const TicketPage = ({ query }: any) => {
   const { getToken, orgId, userId, orgRole } = useAuth();
 
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [activeTickets, setActiveTickets] = useState<Ticket[]>([]);
-  const [role, setRole] = useState<string>("");
   const [loadingTickets, setLoadingTickets] = useState<boolean>(true);
   const [loadingRoles, setLoadingRoles] = useState<boolean>(true);
 
+  // Fetch request tickets
   useEffect(() => {
     async function fetchTickets() {
       const ticket = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tickets/${orgId}`, {
@@ -38,6 +35,7 @@ const TicketConversation = ({ query }: any) => {
     fetchTickets();
   }, []);
 
+  // Org role checks
   useEffect(() => {
     if (orgRole == "org:admin") {
       if (query != "") {
@@ -147,4 +145,4 @@ const TicketConversation = ({ query }: any) => {
   
 };
 
-export default TicketConversation;
+export default TicketPage;

@@ -48,6 +48,15 @@ export default async function Page({ params }: { params: Ticket }) {
     cache: 'no-cache'
   }).then((res) => res.json());
 
+  const notes = await fetch(`http://localhost:3500/tickets/${orgId}/${ticketId}/notes`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${await getToken()}`,
+      "Content-Type": "application/json",
+    },
+    cache: 'no-cache'
+  }).then((res) => res.json());
+
   const user = await fetch(`http://localhost:3500/users/${ticket.userId}/`, {
     method: "GET",
     headers: {
@@ -78,7 +87,7 @@ export default async function Page({ params }: { params: Ticket }) {
           <div className="flex flex-1">
             {/* Replace TicketPages with TicketConversation */}
             <TicketProperties ticket={ticket} user={user} admin={allAdmins} />
-            <TicketConversation props={ticket} /> 
+            <TicketConversation ticket={ticket} notes={notes} /> 
           </div>
         </div>
       </div>

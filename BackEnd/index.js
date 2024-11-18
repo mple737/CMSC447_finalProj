@@ -47,7 +47,7 @@ app.get('/tickets/:organizationId/:id', requireAuth(), async(req, res) => {
 })
 
 // Notes route
-app.use('/tickets/:ticketId/notes', requireAuth(), require('./routes/noteRoutes'))
+app.use('/tickets/:organizationId/:ticketId/notes', requireAuth(), require('./routes/noteRoutes'))
 
 app.get('/users/:userId', requireAuth(), async(req, res) => {
 

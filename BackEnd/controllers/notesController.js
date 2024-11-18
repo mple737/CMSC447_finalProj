@@ -39,7 +39,7 @@ const createNewNote = asyncHandler(async(req, res) => {
     }
 
     const { userId, body } = req.body
-    const userName = await clerkClient.users.getUser(userId).fullName
+    const userName = await (await clerkClient.users.getUser(userId)).firstName + " " + (await clerkClient.users.getUser(userId)).lastName
 
     const ticket = await prisma.ticket.update({
         where: {
@@ -91,7 +91,7 @@ const updateNote = asyncHandler(async(req, res) => {
         return res.status(400).json("Note does not exist")
     }
 
-    const userName = await clerkClient.users.getUser(userId).fullName
+    const userName = await (await clerkClient.users.getUser(userId)).firstName + " " + (await clerkClient.users.getUser(userId)).lastName
 
     // Update note
     const updatedNote = await prisma.note.update({

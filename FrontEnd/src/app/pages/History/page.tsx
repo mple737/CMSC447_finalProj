@@ -108,7 +108,7 @@ const History = () => {
                       </div>
                       
                       <div className="text-xs text-gray-500 dark:text-gray-300">
-                        Resolved by: {item.assignedToName}
+                        Resolved by: {item.assignedToName != null ? item.assignedToName : "N/A"}
                       </div>
                     </Link>
                  

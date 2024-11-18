@@ -20,9 +20,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={`${inter.className}`}>
-        <Providers>
+        <ClerkProvider dynamic>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <div className="flex flex-col min-h-screen">
               <SignedOut>
@@ -37,7 +37,7 @@ export default function RootLayout({
               </SignedIn>
             </div>
           </ThemeProvider>
-        </Providers>
+        </ClerkProvider>
       </body>
     </html>
   );
