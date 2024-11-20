@@ -3,33 +3,43 @@ import React, { useState } from 'react';
 import Sidebar from '../../Component/SideBar';
 import Header from '../../Component/header';
 
+import { useUser, useOrganization, useAuth } from '@clerk/nextjs' 
+
 const CreateTicket: React.FC = () => {
-  const [contactName, setContactName] = useState<string>('');
-  const [email, setEmail] = useState<string>('');
-  const [phone, setPhone] = useState<string>('');
-  const [subject, setSubject] = useState<string>('');
-  const [description, setDescription] = useState<string>('');
+  const [title, setTitle] = useState<string>('');
+  const [body, setDescription] = useState<string>('');
   const [successMessage, setSuccessMessage] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState<string>('');
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+  const [query, setQuery] = useState<string>('')
+
+  const { user } = useUser()
+  const { organization } = useOrganization()
+  const { getToken } = useAuth()
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
   
     const ticketData = {
-      contactName,
-      email,
-      phone,
-      subject,
-      description,
+      organizationId: organization?.id,
+      title,
+      body,
+      userId: user?.id
     };
-  
-    console.log('Ticket Created:', ticketData);
+
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tickets/${organization?.id}`, {
+      method:'POST',
+      headers:{
+        Authorization: `Bearer ${await getToken()}`,
+        "Content-Type": "application/json"
+      },
+      body:JSON.stringify(ticketData)
+    })
+    
+    console.log('Ticket Created:', JSON.stringify(ticketData));
     setSuccessMessage('Ticket created successfully!');
     setErrorMessage('');
-    setContactName('');
-    setEmail('');
-    setPhone('');
-    setSubject('');
+    setTitle('');
     setDescription('');
   
     // Set a timeout to clear the success message after 5 seconds
@@ -39,7 +49,7 @@ const CreateTicket: React.FC = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen dark:bg-gray-900 bg-gray-100">
       {/* Sidebar */}
       <div className="h-screen overflow-y-auto hide-scrollbar">
         <Sidebar />
@@ -47,11 +57,11 @@ const CreateTicket: React.FC = () => {
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
-        <Header />
+        <Header onQuery={setQuery} />
 
         <div className="flex flex-1 p-4 md:p-8 overflow-y-auto hide-scrollbar">
-          <div className="flex-1 max-w-8xl w-full bg-white p-8 rounded-lg shadow-lg mx-auto">
-            <h1 className="text-3xl font-bold mb-4 text-gray-800">Create Ticket</h1>
+          <div className="flex-1 max-w-8xl w-full dark:bg-gray-800 bg-white p-8 rounded-lg shadow-lg mx-auto">
+            <h1 className="text-3xl font-bold mb-4 dark:text-gray-100 text-gray-800">Create Ticket</h1>
             {successMessage && (
               <div className="mb-4 text-green-600 p-2 border border-green-600 bg-green-100 rounded">
                 {successMessage}
@@ -65,55 +75,23 @@ const CreateTicket: React.FC = () => {
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="flex space-x-4">
                 <div className="flex-1">
-                  <label className="block text-gray-700 font-semibold">Customer Name</label>
+                  <label className="block dark:text-gray-300 text-gray-700 font-semibold">Subject</label>
                   <input
                     type="text"
-                    value={contactName}
-                    onChange={(e) => setContactName(e.target.value)}
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
                     required
-                    className="mt-1 block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-black"
-                  />
-                </div>
-                <div className="flex-1">
-                  <label className="block text-gray-700 font-semibold">Email</label>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    className="mt-1 block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-black"
-                  />
-                </div>
-              </div>
-              <div className="flex space-x-4">
-                <div className="flex-1">
-                  <label className="block text-gray-700 font-semibold">Subject</label>
-                  <input
-                    type="text"
-                    value={subject}
-                    onChange={(e) => setSubject(e.target.value)}
-                    required
-                    className="mt-1 block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-black"
-                  />
-                </div>
-                <div className="flex-1">
-                  <label className="block text-gray-700 font-semibold">Phone</label>
-                  <input
-                    type="text"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    required
-                    className="mt-1 block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-black"
+                    className="mt-1 block dark:bg-gray-700 w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 dark:text-white text-black"
                   />
                 </div>
               </div>
               <div>
-                <label className="block text-gray-700 font-semibold">Description</label>
+                <label className="block dark:text-gray-300 text-gray-700 font-semibold">Description</label>
                 <textarea
-                  value={description}
+                  value={body}
                   onChange={(e) => setDescription(e.target.value)}
                   required
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-black"
+                  className="mt-1 block w-full dark:bg-gray-700 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 dark:text-white text-black"
                   rows={4}
                 />
               </div>

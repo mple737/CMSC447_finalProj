@@ -4,7 +4,7 @@ const fs = require('fs')
 const fsPromises = require('fs').promises
 const path = require('path')
 
-const logEvents = async(message, logFileName) => {
+const logEvents = async (message, logFileName) => {
     const dateTime = `${format(new Date(), 'yyyyMMdd\tHH:mm:ss')}`
     const logItem = `${dateTime}\t${uuid()}\t${message}\n`
 
@@ -21,8 +21,10 @@ const logEvents = async(message, logFileName) => {
 
 const logger = (req, res, next) => {
     // Add functionality to only record logs from an unknown source
-    logEvents(`${req.method}\t${req.url}\t${req.headers.origin}`, 'reqLog.log')
-    console.log(`${req.method} ${req.path}`)
+    if (req.method != 'GET' && req.method != 'OPTIONS') {
+        logEvents(`${req.method}\t${req.url}\t${req.headers.origin}`, 'reqLog.log')
+        console.log(`${req.method} ${req.path}`)
+    }
     next()
 }
 

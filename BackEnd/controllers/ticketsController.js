@@ -1,12 +1,18 @@
-const prisma = require('../prisma/clients')
+const { prisma } = require('../prisma/clients')
+const { clerkClient } = require('@clerk/express')
 const asyncHandler = require('express-async-handler')
-
 // @desc Get all tickets
 // @route GET /tickets
 // @access Private
 
 const getAllTickets = asyncHandler(async(req, res) => {
+
+    const { organizationId }  = req.params
+
     const tickets = await prisma.ticket.findMany({
+        where: {
+            organizationId: organizationId
+        },
         include: {
             notes: true
         }
@@ -19,19 +25,33 @@ const getAllTickets = asyncHandler(async(req, res) => {
 // @access Private
 
 const createNewTicket = asyncHandler(async(req, res) => {
-    const { title, body, contactId, type, category, status, assignedToId } = req.body
-    if(!title || !body || !contactId) {
-        return res.status(400).json("Invalid request; Provide all required fields")
+
+    const { organizationId }  = req.params
+
+    const { title, body, userId, type, category, status, assignedToId } = req.body
+    if( !title || !body || !userId) {
+        
+        return res.status(400).json({message: "Provide all required fields"})
     }
+
+    const userName = (await clerkClient.users.getUser(userId)).fullName
+    const assignedToName = null
+    if(assignedToId) {
+        assignedToName = await clerkClient.users.getUser(assignedToId).fullName
+    }
+
     const ticket = await prisma.ticket.create({
         data: {
+            organizationId : organizationId,
             title,
             body,
-            contactId,
+            userId,
+            userName,
             type,
             category,
             status,
             assignedToId,
+            assignedToName,
             notes: { create: [], },
         },
         include: {
@@ -46,29 +66,37 @@ const createNewTicket = asyncHandler(async(req, res) => {
 // @access Private
 
 const updateTicket = asyncHandler(async(req, res) => {
-    const { id, title, body, contactId, type, category, status, assignedToId } = req.body
+    const { organizationId }  = req.params
+
+    const { id, title, body, contactId, type, category, status, assignedToName, assignedToId } = req.body
     
     const existingTicket = await prisma.ticket.findUnique({
         where: {
+            organizationId: organizationId,
             id: id,
         },
     })
 
     if(!existingTicket) {
-        return res.status(400).json("Invalid request; Ticket does not exist")
+        return res.status(400).json({message: "Ticket does not exist"})
     }
+    
+    const userName = await clerkClient.users.getUser(existingTicket.userId).fullName
+
 
     const ticket = await prisma.ticket.update({
         where: {
+            organizationId: organizationId,
             id: id
         },
         data: {
             title,
             body,
-            contactId,
+            userName,
             type,
             category,
             status,
+            assignedToName,
             assignedToId
         }
     })
@@ -81,6 +109,8 @@ const updateTicket = asyncHandler(async(req, res) => {
 // @access Private
 
 const deleteTicket = asyncHandler(async(req, res) => {
+        const { organizationId }  = req.params
+
         const { id } = req.body
 
         const existingTicket = await prisma.ticket.findUnique({
@@ -90,7 +120,7 @@ const deleteTicket = asyncHandler(async(req, res) => {
         })
 
         if(!existingTicket) {
-            return res.status(400).json("Invalid request; Ticket does not exist")
+            return res.status(400).json({message: "Ticket does not exist"})
         }
         // Remove all notes
 

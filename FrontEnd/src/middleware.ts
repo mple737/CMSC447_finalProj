@@ -1,6 +1,26 @@
 import { clerkMiddleware } from "@clerk/nextjs/server";
 
-export default clerkMiddleware();
+export default clerkMiddleware((async (auth, req) => {
+  const { userId, orgId, orgRole } = await auth()
+
+  // Redirect signed in users to organization selection page if they are not active in an organization
+  if (
+    userId &&
+    !orgId &&
+    req.nextUrl.pathname.startsWith('/') &&
+    req.nextUrl.pathname !== '/org-selection'
+  ) {
+    const searchParams = new URLSearchParams({ redirectUrl: req.url })
+
+
+      //This maybe the reason where i get the error 
+    const orgSelection = new URL(`/org-selection?${searchParams.toString()}`, req.url)
+
+    return Response.redirect(orgSelection)
+  }
+
+}))
+
 
 export const config = {
   matcher: [

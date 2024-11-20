@@ -25,10 +25,10 @@ app.use('/', express.static(path.join(__dirname, '/public')))
 app.use('/', require('./routes/root'))
 
 // Tickets route
-app.use('/tickets', require('./routes/ticketRoutes'))
+app.use('/tickets/:organizationId', requireAuth(), require('./routes/ticketRoutes'))
 
 // Single ticket by id
-app.get('/tickets/:id/', async(req, res) => {
+app.get('/tickets/:organizationId/:id', requireAuth(), async(req, res) => {
     const { id } = req.params
     if(!mongoose.isValidObjectId(id)) {
         return res.status(400).json({message:"Invalid Object ID"})
@@ -40,14 +40,40 @@ app.get('/tickets/:id/', async(req, res) => {
     })
 
     if(!ticket) {
-        return res.json("Ticket does not exist")
+        return res.status(400).json({message:"Ticket does not exist"})
     }
 
     res.json(ticket)
 })
 
 // Notes route
-app.use('/tickets/:ticketId/notes', require('./routes/noteRoutes'))
+app.use('/tickets/:organizationId/:ticketId/notes', requireAuth(), require('./routes/noteRoutes'))
+
+app.get('/users/:userId', requireAuth(), async(req, res) => {
+
+    const { userId } = req.params
+
+    const user = await clerkClient.users.getUser(userId)
+    res.json(user)
+})
+
+app.get('/users/:userId/:organizationId', requireAuth(), async(req, res) => {
+   
+    const {userId, organizationId} = req.params
+    const users = await clerkClient.organizations.getOrganizationMembershipList({organizationId, orderBy: userId})
+    res.json(users)
+})
+
+app.get('/users/:userId/:organizationId/role', requireAuth(), async(req, res) => {
+   
+    const {userId, organizationId} = req.params
+    const users = await clerkClient.organizations.getOrganizationMembershipList({organizationId, orderBy: userId})
+
+    const role = users.data[0].role
+
+    res.json(role)
+})
+
 
 // 404 Handling
 app.all('*', (req, res) => {
