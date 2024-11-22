@@ -88,10 +88,13 @@ const TicketProperties: React.FC<{ ticket: any; user: any; admin: any }> = ({ ti
     setModalMessage("Your ticket has updated successfully!");
     setModalType("success");
     setShowSuccessModal(true);
+    setTimeout(() => window.location.reload(), 2000); //refresh to update the status in coversation
     
-    setTimeout(() => {
-      setShowSuccessModal(false); 
-    }, 3000);  //Redirect to the previous page not neccessary
+    //setTimeout(() => {
+    //  setShowSuccessModal(false); 
+    //}, 3000);  
+    //get rid of this since it is unccessary
+
   };
 
   return (
@@ -122,7 +125,7 @@ const TicketProperties: React.FC<{ ticket: any; user: any; admin: any }> = ({ ti
             </p>
            
             <p className="text-gray-800 dark:text-gray-300 text-sm">
-              Phone: <b> {user.phoneNumbers[0].phoneNumber} </b>
+              Phone: <b> </b>
            
             </p>
           </div>
