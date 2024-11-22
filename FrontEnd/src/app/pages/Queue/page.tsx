@@ -159,7 +159,7 @@ const Queue = () => {
                   {activeTickets.map((item) => (
                     <li
                       key={item.id}
-                      className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg shadow-md dark:hover:bg-gray-600 hover:bg-gray-100"
+                      className="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg shadow-md dark:hover:bg-gray-600 hover:bg-gray-200"
                     >
                       <Link href={"/ticket/" + item.id}>
                         <div className="font-semibold text-lg dark:text-gray-300 text-gray-700">
@@ -189,7 +189,7 @@ const Queue = () => {
                   {completedTickets.map((item) => (
                     <li
                       key={item.id}
-                      className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg shadow-md dark:hover:bg-gray-600 hover:bg-gray-100"
+                      className="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg shadow-md dark:hover:bg-gray-600 hover:bg-gray-200"
                     >
                       <Link href={"/ticket/" + item.id}>
                         <div className="font-semibold dark:text-gray-300 text-lg text-gray-700">

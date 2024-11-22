@@ -78,7 +78,7 @@ const TicketPage = ({ query }: any) => {
 
   if (loadingTickets && loadingRoles) {
     return (
-      <div className="flex flex-1 flex-col md:flex-row md:space-x-8 p-4 md:p-8 ">
+      <div className="flex flex-1 flex-col md:flex-row md:space-x-8 p-4 md:p-8 min-h-screen md:min-h-0">
         <div className="flex-1 dark:bg-gray-800 bg-white p-6 rounded-lg shadow-lg">
           
           <h1 className="text-2xl md:text-3xl font-bold mb-4 dark:text-gray-100 text-gray-800">
@@ -97,62 +97,62 @@ const TicketPage = ({ query }: any) => {
   }
   
   return (
-    <div className="flex flex-1 flex-col md:flex-row md:space-x-8 p-4 md:p-8">
-      <div className="flex-1 dark:bg-gray-800 bg-white p-6 rounded-lg shadow-lg">
-        
-        <h1 className="text-2xl md:text-3xl font-bold dark:text-gray-100 mb-4 text-gray-800">
-        
-          Tickets
-        </h1>
-  
-         {/* Main Container with Fixed Height */}
-        <div className="max-h-[68vh] overflow-y-auto hide-scrollbar">
-          <ul className="space-y-4">
-           
-            {activeTickets.map((tic) => (
-             
-             <li key={tic.id}>
-               
-                <div className="flex-1 p-4 space-y-6">
-                 
-                  <Link href={`/ticket/${tic.id}`}>
-                    <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg shadow-md dark:hover:bg-gray-600 hover:bg-gray-100">
-                     
-                      <h2 className="text-xl dark:text-gray-300 font-bold text-gray-700">
-                        #{tic.ticketNumber} - {tic.title}
-                      </h2>
-                     
-                      <p className="text-sm dark:text-gray-400 text-gray-500">
-                        <Date dateString={tic.createdDate} />
-                      </p>
 
-                      <div
-                          className={`text-sm font-medium py-1 ${
-                            tic.status === "Pending"
-                              ? "text-yellow-500"
-                              : tic.status === "Open"
-                              ? "text-blue-500"
-                              : ""
-                          }`}
-                        >
-                          Status: {tic.status}
-                        </div>
-                     
-                      <div className="mt-4 dark:text-gray-400 text-gray-500">
-                        <p><strong>{tic.userName}</strong></p>
-                        <p className="dark:text-gray-300 text-gray-700">{tic.body}</p>
-                      </div>
-                    </div>
-                  
-                  </Link>
+    //added md:p-8 min-h-screen md:min-h-0 to make screen display better on mobile
+    <div className="flex flex-1 flex-col md:flex-row md:space-x-8 p-4 md:p-8 min-h-screen md:min-h-0">
+
+    <div className="flex-1 dark:bg-gray-800 bg-white p-3 rounded-lg shadow-lg">
+      
+      <h1 className="text-2xl md:text-3xl font-bold dark:text-gray-100 mb-6 text-gray-800">
+        Tickets
+      </h1>
+  
+      {/* Main Container with Fixed Height */}
+      <div className="max-h-[65vh] overflow-y-auto hide-scrollbar gap-2">
+        <ul className="space-y-4">
+          {activeTickets.map((tic) => (
+           
+           <li key={tic.id}>
+              
+              <div className="flex-1 px-6 space-y-2">
                
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
+                <Link href={`/ticket/${tic.id}`}>
+                 
+                  <div className="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg shadow-md dark:hover:bg-gray-600 hover:bg-gray-200">
+                    <h2 className="text-l dark:text-gray-300 font-bold text-gray-700">
+                      #{tic.ticketNumber} - {tic.title}
+                    </h2>
+  
+                    <p className="text-sm dark:text-gray-400 text-gray-500">
+                      <Date dateString={tic.createdDate} />
+                    </p>
+  
+                    <div
+                      className={`text-sm font-medium py-1 ${
+                        tic.status === "Pending"
+                          ? "text-yellow-500"
+                          : tic.status === "Open"
+                          ? "text-blue-500"
+                          : ""
+                      }`}
+                    >
+                      Status: {tic.status}
+                    </div>
+  
+                    <div className="mt-1 dark:text-gray-400 text-gray-500">
+                      <p><strong>{tic.userName}</strong></p>
+                      <p className="dark:text-gray-300 text-gray-700">{tic.body}</p>
+                    </div>
+                  </div>
+                </Link>
+              </div>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
+  </div>
+  
   );
   
   

@@ -46,7 +46,7 @@ const Sidebar = () => {
         </h1>
         
         {/* Sidebar Navigation Links */}
-        <nav className="space-y-6">
+        <nav className="space-y-6 ">
 
           <Link href="/dashboard" className="flex items-center space-x-3 hover:bg-gray-700 p-3 rounded-md transition-all duration-300">
             <FaTicketAlt /> <span>Tickets</span>

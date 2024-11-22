@@ -92,7 +92,7 @@ const History = () => {
                 {resolvedTickets.map((item) => (
                   <li
                     key={item.id}
-                    className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg shadow-md hover:bg-gray-100 dark:hover:bg-gray-600"
+                    className="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg shadow-md hover:bg-gray-200 dark:hover:bg-gray-300"
                   >
                     <Link href={`/ticket/${item.id}`}>
                       <div className="font-semibold text-lg dark:text-gray-300 text-gray-700">
