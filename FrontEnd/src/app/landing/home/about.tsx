@@ -10,8 +10,8 @@ const About = () => {
           {/* Text Section */}
           <div className="md:w-1/2 mb-7 md:mb-0 flex justify-center md:ml-12"> {/* Added margin-left */}
             <div className="text-center md:text-left">
-              <h2 className="text-3xl font-semibold mb-4 text-black"> ABOUT US </h2>
-              <p className="text-lg leading-relaxed text-black">
+              <h2 className="text-3xl font-bold mb-4 text-black"> ABOUT US </h2>
+              <p className="text-lg font-semibold leading-relaxed text-black">
                 Welcome to our AI-powered User Management Platform! Streamline user
                 roles, support tickets, and messaging with ease. Stay connected
                 with features like role management, a contacts list, and
