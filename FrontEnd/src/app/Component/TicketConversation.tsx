@@ -12,6 +12,13 @@ const TicketConversation: React.FC<{ ticket: Ticket, notes: Note[] }> = ({ ticke
   const [replyMessage, setReplyMessage] = useState(""); // store reply message
   const [conversation, setConversation] = useState<Note[]>(notes); // store conversation thread
   const [showCloseModal, setShowCloseModal] = useState(false)
+  
+  const [tickets, setTickets] = useState<Ticket[]>([]);
+  const [activeTickets, setActiveTickets] = useState<Ticket[]>([]);
+  const [loadingTickets, setLoadingTickets] = useState<boolean>(true);
+  const [loadingRoles, setLoadingRoles] = useState<boolean>(true);
+
+
 
   // Fetch request ticket notes
   useEffect(() => {
@@ -28,6 +35,8 @@ const TicketConversation: React.FC<{ ticket: Ticket, notes: Note[] }> = ({ ticke
 
     fetchNotes();
   }, [, isReplying]);
+
+  
 
   const handleSendReply = async () => {
     // Post note with gathered data
@@ -70,14 +79,37 @@ const TicketConversation: React.FC<{ ticket: Ticket, notes: Note[] }> = ({ ticke
 
   };
 
+//Need to fix this becuase as soon as user create the ticket 
+//it will said status: OPEN instead of null 
 
   return (
 
     <div className="flex-1 w-full dark:bg-gray-900 p-4 space-y-6">
       <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
-        <h2 className="text-lg font-semibold dark:text-gray-100 text-gray-800">
-          #{ticket.ticketNumber} - {ticket.title}
+        <h2 className="text-lg font-semibold dark:text-gray-100 text-gray-800 flex justify-between">
+          <span>
+            #{ticket.ticketNumber} - {ticket.title}
+          </span>
+          <span className="text-md font-medium">
+            Status:{" "}
+            <span
+              className={`${
+                ticket.status === "Pending"
+                  ? "text-yellow-500"
+                  : ticket.status === "Open"
+                  ? "text-blue-500"
+                  : ticket.status === "Closed"
+                  ? "text-red-500"
+                  : ""
+              }`}
+            >
+              {ticket.status}
+            </span>
+          </span>
         </h2>
+
+
+          
 
         {/* Main Container with Fixed Height */}
         <div className="mt-4 max-h-[70.5vh] flex flex-col justify-between space-y-12">

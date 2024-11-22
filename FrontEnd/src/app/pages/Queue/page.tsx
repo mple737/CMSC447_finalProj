@@ -36,6 +36,7 @@ const Queue = () => {
     fetchTickets();
     
   }, []);
+  
   useEffect(() => {
     if (orgRole == "org:admin") {
       if (query != "") {
@@ -165,15 +166,15 @@ const Queue = () => {
                           Ticket #{item.ticketNumber}
                         </div>
                         <div className="text-gray-600 dark:text-gray-300">Issue: {item.title}</div>
-                        <div
-                          className={`text-sm font-medium ${
-                            item.status === "Pending"
-                              ? "text-yellow-500"
-                              : item.status === "Open"
-                              ? "text-blue-500"
-                              : ""
-                          }`}
-                        >
+                          <div
+                            className={`text-sm font-medium ${
+                              item.status === "Pending"
+                                ? "text-yellow-500"
+                                : item.status === "Open"
+                                ? "text-blue-500"
+                                : ""
+                            }`}
+                          >
                           Status: {item.status}
                         </div>
                       </Link>

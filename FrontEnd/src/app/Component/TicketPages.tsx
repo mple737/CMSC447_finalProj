@@ -72,6 +72,7 @@ const TicketPage = ({ query }: any) => {
           )
         );
       }
+      
     }
   }, [loadingTickets, loadingRoles, query]);
 
@@ -124,6 +125,18 @@ const TicketPage = ({ query }: any) => {
                       <p className="text-sm dark:text-gray-400 text-gray-500">
                         <Date dateString={tic.createdDate} />
                       </p>
+
+                      <div
+                          className={`text-sm font-medium py-1 ${
+                            tic.status === "Pending"
+                              ? "text-yellow-500"
+                              : tic.status === "Open"
+                              ? "text-blue-500"
+                              : ""
+                          }`}
+                        >
+                          Status: {tic.status}
+                        </div>
                      
                       <div className="mt-4 dark:text-gray-400 text-gray-500">
                         <p><strong>{tic.userName}</strong></p>
