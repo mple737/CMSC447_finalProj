@@ -12,14 +12,8 @@ const TicketConversation: React.FC<{ ticket: Ticket, notes: Note[] }> = ({ ticke
   const [replyMessage, setReplyMessage] = useState(""); // store reply message
   const [conversation, setConversation] = useState<Note[]>(notes); // store conversation thread
   const [showCloseModal, setShowCloseModal] = useState(false)
-  
-  const [tickets, setTickets] = useState<Ticket[]>([]);
-  const [activeTickets, setActiveTickets] = useState<Ticket[]>([]);
-  const [loadingTickets, setLoadingTickets] = useState<boolean>(true);
-  const [loadingRoles, setLoadingRoles] = useState<boolean>(true);
 
-
-
+ 
   // Fetch request ticket notes
   useEffect(() => {
     async function fetchNotes() {
@@ -61,23 +55,33 @@ const TicketConversation: React.FC<{ ticket: Ticket, notes: Note[] }> = ({ ticke
 
 
   const handleCloseTicket = async () => {
-    // Patch ticket with "closed" status
-    const tickets = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tickets/${ticket.organizationId}/`, {
-      method: "PATCH",
-      headers: {
-        Authorization: `Bearer ${await getToken()}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        "id": ticket.id,
-        "status": "Closed"
-      })
-    }).then((res) => res.json());
-
-    setShowCloseModal(true)
-    setTimeout(() => window.location.reload(), 2000); // Reload window to see results
-
+    try {
+      // Patch ticket with "closed" status
+      const tickets = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tickets/${ticket.organizationId}/`, {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${await getToken()}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          "id": ticket.id,
+          "status": "Closed"
+        })
+      }).then((res) => res.json());
+  
+      // Show confirmation modal to inform the user
+      setShowCloseModal(true);
+    } catch (error) {
+      console.error("Failed to close ticket:", error);
+    }
   };
+
+  //This will reload the page when user hit confirmed
+  const handleConfirmClose = () => {
+    window.location.reload(); 
+    setShowCloseModal(false); 
+  };
+
 
 //Need to fix this becuase as soon as user create the ticket 
 //it will said status: OPEN instead of null 
@@ -146,6 +150,7 @@ const TicketConversation: React.FC<{ ticket: Ticket, notes: Note[] }> = ({ ticke
               >
                 Reply
               </button>
+              
               <button
                 className="px-4 py-2 bg-red-700 hover:bg-red-800 text-white rounded-lg transition duration-200"
                 onClick={handleCloseTicket}
@@ -183,15 +188,16 @@ const TicketConversation: React.FC<{ ticket: Ticket, notes: Note[] }> = ({ ticke
 
         </div>
       </div>
+      
       {showCloseModal && (
           <ModalPopup
            
             open={showCloseModal}
-            title="Success"
-            message={"Ticket closed!"}
-            type="success"
-           
-            onOkay={() => setShowCloseModal(false)}
+            title="Confirm Close"
+            message="Are you sure you want to close this ticket?"
+            type="error"
+            onClose={() => setShowCloseModal(false)}
+            onConfirm={handleConfirmClose} //go to handle confim
           />
         )}
 
