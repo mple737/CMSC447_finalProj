@@ -78,7 +78,7 @@ const ContactSection: React.FC = () => {
               <input
                 type="text"
                 placeholder="Subject"
-                className={`w-full px-4 py-3 text-sm sm:text-base border-2 rounded-md placeholder:text-gray-400 focus:ring-4 outline-none transition ${
+                className={`w-full px-4 py-3 text-black text-sm bg-white sm:text-base border-2 rounded-md placeholder:text-gray-400 focus:ring-4 outline-none transition ${
                   errors.subject ? "border-red-600 focus:ring-red-600" : "border-gray-300 focus:ring-blue-600"
                 }`}
                 {...register("subject", {
@@ -90,11 +90,11 @@ const ContactSection: React.FC = () => {
             </div>
 
             {/* Name Field */}
-            <div className="mb-4">
+            <div className="mb-4 ">
               <input
                 type="text"
                 placeholder="Full Name"
-                className={`w-full px-4 py-3 text-sm sm:text-base border-2 rounded-md placeholder:text-gray-400 focus:ring-4 outline-none transition ${
+                className={`w-full px-4 py-3 text-black  text-sm bg-white sm:text-base border-2 rounded-md placeholder:text-gray-400 focus:ring-4 outline-none transition ${
                   errors.name ? "border-red-600 focus:ring-red-600" : "border-gray-300 focus:ring-blue-600"
                 }`}
                 {...register("name", {
@@ -110,7 +110,7 @@ const ContactSection: React.FC = () => {
               <input
                 type="email"
                 placeholder="Email Address"
-                className={`w-full px-4 py-3 text-sm sm:text-base border-2 rounded-md placeholder:text-gray-400 focus:ring-4 outline-none transition ${
+                className={`w-full px-4 py-3 text-black bg-white text-sm sm:text-base border-2 rounded-md placeholder:text-gray-400 focus:ring-4 outline-none transition ${
                   errors.email ? "border-red-600 focus:ring-red-600" : "border-gray-300 focus:ring-blue-600"
                 }`}
                 {...register("email", {
@@ -125,7 +125,7 @@ const ContactSection: React.FC = () => {
             <div className="mb-4">
               <textarea
                 placeholder="Your Message"
-                className={`w-full px-4 py-3 text-sm sm:text-base border-2 rounded-md placeholder:text-gray-400 focus:ring-4 outline-none transition ${
+                className={`w-full px-4 py-3 bg-white text-black text-sm sm:text-base border-2 rounded-md placeholder:text-gray-400 focus:ring-4 outline-none transition ${
                   errors.message ? "border-red-600 focus:ring-red-600" : "border-gray-300 focus:ring-blue-600"
                 }`}
                 rows={5}
@@ -137,7 +137,8 @@ const ContactSection: React.FC = () => {
             {/* Submit Button */}
             <button
               type="submit"
-              className="w-full py-3 text-white text-sm sm:text-base bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg hover:from-purple-700 hover:to-blue-700 focus:outline-none transition"
+              className="w-full py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-sm sm:text-base rounded-lg hover:from-purple-700 hover:to-blue-700 focus:outline-none transition"
+
             >
               {isSubmitting ? "Sending..." : "Send Message"}
             </button>
