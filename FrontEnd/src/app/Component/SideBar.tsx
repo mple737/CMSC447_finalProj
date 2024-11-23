@@ -41,7 +41,7 @@ const Sidebar = () => {
         } md:relative md:translate-x-0 md:block`}
       >
         {/* Sidebar Header */}
-        <h1 className="text-3xl font-extrabold text-center mb-10 sm:mt-12 md:mt-0">
+        <h1 className="text-xl font-extrabold text-center mb-10 sm:mt-12 md:mt-0">
           Supportlify
         </h1>
         

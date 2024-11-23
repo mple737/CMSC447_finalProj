@@ -46,8 +46,10 @@ const Header = () => {
       {/* Navigation Links */}
       <nav className={`hidden md:flex space-x-12 ml-auto mr-8 ${isMobileMenuOpen ? "block" : "hidden"} md:block`}>
        
-        <Link href="/homepage" className="font-semibold uppercase text-black hover:text-gray-600 transition duration-200"> Home </Link>
-              
+        <Link href="/homepages" className="font-semibold uppercase text-black hover:text-gray-600 transition duration-200"> Home </Link>
+        
+        <Link href="/demo" className="font-semibold uppercase text-black hover:text-gray-600 transition duration-200"> Demo </Link>            
+        
         <Link href="/services" className="font-semibold uppercase text-black hover:text-gray-600 transition duration-200"> Services </Link>
 
         <Link href="/about" className="font-semibold uppercase text-black hover:text-gray-600 transition duration-200"> About Us </Link>
@@ -96,7 +98,9 @@ const Header = () => {
            
             <Link href="/homePage" className="font-semibold uppercase text-black hover:text-gray-600 transition duration-200"> Home </Link>
            
-            <Link href="/services" className="font-semibold uppercase text-black hover:text-gray-600 transition duration-200"> Services </Link>\
+            <Link href="/demo" className="font-semibold uppercase text-black hover:text-gray-600 transition duration-200"> Demo </Link>            
+         
+            <Link href="/services" className="font-semibold uppercase text-black hover:text-gray-600 transition duration-200"> Services </Link>
 
             <Link href="/about" className="font-semibold uppercase text-black hover:text-gray-600 transition duration-200"> About Us </Link>
            
