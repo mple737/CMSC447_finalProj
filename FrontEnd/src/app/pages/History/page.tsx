@@ -14,6 +14,7 @@ const History = () => {
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [resolvedTickets, setResolvedTickets] = useState<Ticket[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  
   useEffect(() => {
     async function fetchTickets() {
       const ticket = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tickets/${orgId}`, {
@@ -32,16 +33,20 @@ const History = () => {
   // Filter to get only resolved tickets (including search)
 
   useEffect(() => {
-    if (query != "") {
+    if (query !== "") {
       setResolvedTickets(
         tickets.filter(
-          (item) => item.status == "Closed" && item.title.includes(query)
+          (item) =>
+            item.status === "Closed" &&
+            (item.title.toLowerCase().includes(query.toLowerCase()) ||
+             item.ticketNumber.toString().includes(query))
         )
       );
     } else {
-      setResolvedTickets(tickets.filter((item) => item.status == "Closed"));
+      setResolvedTickets(tickets.filter((item) => item.status === "Closed"));
     }
   }, [loading, query]);
+  
 
   if (loading) {
     return (

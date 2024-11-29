@@ -38,34 +38,39 @@ const Queue = () => {
   }, []);
   
   useEffect(() => {
-    if (orgRole == "org:admin") {
-      if (query != "") {
+    if (orgRole === "org:admin") {
+      if (query !== "") {
         setActiveTickets(
           tickets.filter(
             (ticket) =>
-              (ticket.status == "Open" || ticket.status == "Pending") && ticket.assignedToId == userId &&
-              ticket.title.includes(query)
+              (ticket.status === "Open" || ticket.status === "Pending") &&
+              ticket.assignedToId === userId &&
+              (ticket.title.toLowerCase().includes(query.toLowerCase()) ||
+               ticket.ticketNumber.toString().includes(query))
           )
         );
-
+  
         setCompletedTickets(
           tickets.filter(
             (ticket) =>
-              ticket.status == "Closed" &&
-              ticket.assignedToId == userId &&
-              ticket.title.includes(query)
+              ticket.status === "Closed" &&
+              ticket.assignedToId === userId &&
+              (ticket.title.toLowerCase().includes(query.toLowerCase()) ||
+               ticket.ticketNumber.toString().includes(query))
           )
         );
       } else {
         setActiveTickets(
           tickets.filter(
-            (ticket) => (ticket.status == "Open" || ticket.status == "Pending") && ticket.assignedToId == userId
+            (ticket) =>
+              (ticket.status === "Open" || ticket.status === "Pending") &&
+              ticket.assignedToId === userId
           )
         );
         setCompletedTickets(
           tickets.filter(
             (ticket) =>
-              ticket.status == "Closed" && ticket.assignedToId == userId
+              ticket.status === "Closed" && ticket.assignedToId === userId
           )
         );
       }
@@ -74,6 +79,7 @@ const Queue = () => {
       setCompletedTickets([]);
     }
   }, [loadingTickets, query]);
+  
 
   if (loadingTickets) {
     return (

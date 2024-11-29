@@ -38,43 +38,45 @@ const TicketPage = ({ query }: any) => {
   // Org role checks
   useEffect(() => {
     if (orgRole == "org:admin") {
-      if (query != "") {
+      if (query !== "") {
         setActiveTickets(
           tickets.filter(
             (ticket) =>
-              (ticket.status == "Open" || ticket.status == "Pending") &&
-              ticket.title.includes(query)
+              (ticket.status === "Open" || ticket.status === "Pending") &&
+              (ticket.title.toLowerCase().includes(query.toLowerCase()) ||
+               ticket.ticketNumber.toString().includes(query))
           )
         );
       } else {
         setActiveTickets(
           tickets.filter(
-            (ticket) => ticket.status == "Open" || ticket.status == "Pending"
+            (ticket) => ticket.status === "Open" || ticket.status === "Pending"
           )
         );
       }
     } else {
-      if (query != "") {
+      if (query !== "") {
         setActiveTickets(
           tickets.filter(
             (ticket) =>
-              (ticket.status == "Open" || ticket.status == "Pending") &&
-              ticket.userId == userId &&
-              ticket.title.includes(query)
+              (ticket.status === "Open" || ticket.status === "Pending") &&
+              ticket.userId === userId &&
+              (ticket.title.toLowerCase().includes(query.toLowerCase()) ||
+               ticket.ticketNumber.toString().includes(query))
           )
         );
       } else {
         setActiveTickets(
           tickets.filter(
             (ticket) =>
-              (ticket.status == "Open" || ticket.status == "Pending") &&
-              ticket.userId == userId
+              (ticket.status === "Open" || ticket.status === "Pending") &&
+              ticket.userId === userId
           )
         );
       }
-      
     }
   }, [loadingTickets, loadingRoles, query]);
+  
 
   if (loadingTickets && loadingRoles) {
     return (
